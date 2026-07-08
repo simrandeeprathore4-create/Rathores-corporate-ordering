@@ -1,0 +1,1852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rathore's Kitchen — Corporate Ordering | Punjabi Food for Bay Area Offices</title>
+<meta name="description" content="Corporate catering ordering for Rathore's Kitchen, Mountain View. Volume discounts up to 15%, full Punjabi menu, pay by card or invoice.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+/*__CONFIG_START__*/
+const CONFIG = {
+  "adminPin": "1711",
+  "business": {
+    "phone": "(669) 243-0547",
+    "email": "info@rathoreskitchen.com",
+    "deliveryFee": 25,
+    "freeDeliveryOver": 300,
+    "gratuityPresets": [
+      0,
+      10,
+      15,
+      18,
+      20
+    ],
+    "supabaseUrl": "",
+    "supabaseAnonKey": ""
+  },
+  "tiers": [
+    {
+      "min": 30,
+      "discountPct": 15,
+      "label": "30+"
+    },
+    {
+      "min": 20,
+      "discountPct": 10,
+      "label": "20–29"
+    },
+    {
+      "min": 10,
+      "discountPct": 5,
+      "label": "10–19"
+    },
+    {
+      "min": 0,
+      "discountPct": 0,
+      "label": "1–9"
+    }
+  ],
+  "combos": [
+    {
+      "id": "chicken-kathi",
+      "name": "Chicken Kathi Roll Combo",
+      "price": 13.9,
+      "veg": false,
+      "includes": "Chicken Kathi Roll, Waffle Fries",
+      "modifierGroups": [
+        {
+          "name": "Add-ons",
+          "type": "addon",
+          "options": [
+            {
+              "name": "Add Eggs",
+              "price": 2.65
+            },
+            {
+              "name": "Make It Double Stuffing",
+              "price": 4.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "paneer-kathi",
+      "name": "Paneer Kathi Roll Combo",
+      "price": 13.9,
+      "veg": true,
+      "includes": "Paneer Kathi Roll, Waffle Fries",
+      "modifierGroups": [
+        {
+          "name": "Add-ons",
+          "type": "addon",
+          "options": [
+            {
+              "name": "Add Eggs",
+              "price": 2.65
+            },
+            {
+              "name": "Make It Double Stuffing",
+              "price": 4.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ctm-combo",
+      "name": "Chicken Tikka Masala Combo",
+      "price": 17.9,
+      "veg": false,
+      "includes": "12oz Chicken Tikka Masala, 12oz Rice, Half Naan",
+      "modifierGroups": [
+        {
+          "name": "Choose Naan",
+          "type": "choice",
+          "options": [
+            {
+              "name": "Garlic Naan",
+              "price": 0
+            },
+            {
+              "name": "Butter Naan",
+              "price": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "butter-chicken-combo",
+      "name": "Smoked Butter Chicken Combo",
+      "price": 17.9,
+      "veg": false,
+      "includes": "12oz Butter Chicken, 12oz Rice, Half Naan",
+      "modifierGroups": [
+        {
+          "name": "Choose Naan",
+          "type": "choice",
+          "options": [
+            {
+              "name": "Garlic Naan",
+              "price": 0
+            },
+            {
+              "name": "Butter Naan",
+              "price": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dal-tadka-combo",
+      "name": "Dal Tadka Combo",
+      "price": 17.9,
+      "veg": true,
+      "includes": "12oz Dal Tadka, 12oz Rice, Bread of Choice, Pickle",
+      "modifierGroups": [
+        {
+          "name": "Choose Bread",
+          "type": "choice",
+          "options": [
+            {
+              "name": "2 Tawa Roti",
+              "price": 0
+            },
+            {
+              "name": "1 Plain Prantha",
+              "price": 0
+            },
+            {
+              "name": "2 Plain Prantha",
+              "price": 3.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "baingan-bhartha-combo",
+      "name": "Baingan Bhartha Combo",
+      "price": 17.9,
+      "veg": true,
+      "includes": "12oz Baingan Bhartha, 12oz Rice, Bread of Choice, Pickle",
+      "modifierGroups": [
+        {
+          "name": "Choose Bread",
+          "type": "choice",
+          "options": [
+            {
+              "name": "2 Tawa Roti",
+              "price": 0
+            },
+            {
+              "name": "1 Plain Prantha",
+              "price": 0
+            },
+            {
+              "name": "2 Plain Prantha",
+              "price": 3.4
+            },
+            {
+              "name": "Garlic Naan",
+              "price": 2.4
+            },
+            {
+              "name": "Butter Naan",
+              "price": 2.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "palak-paneer-combo",
+      "name": "Palak Paneer Combo",
+      "price": 17.9,
+      "veg": true,
+      "priceAssumed": true,
+      "includes": "12oz Palak Paneer, 12oz Rice, Bread of Choice",
+      "modifierGroups": [
+        {
+          "name": "Choose Bread",
+          "type": "choice",
+          "options": [
+            {
+              "name": "2 Tawa Roti",
+              "price": 0
+            },
+            {
+              "name": "1 Plain Prantha",
+              "price": 0
+            },
+            {
+              "name": "2 Plain Prantha",
+              "price": 3.4
+            },
+            {
+              "name": "Garlic Naan",
+              "price": 2.4
+            },
+            {
+              "name": "Butter Naan",
+              "price": 2.4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "saag-thali",
+      "name": "Saag Thali",
+      "price": 17.9,
+      "veg": true,
+      "includes": "12oz Saag, 2 Makki Roti, Salad, Jaggery",
+      "modifierGroups": []
+    },
+    {
+      "id": "tandoori-rice-bowl",
+      "name": "Tandoori Rice Bowl",
+      "price": 17.9,
+      "veg": null,
+      "includes": "Rice, Salad",
+      "modifierGroups": [
+        {
+          "name": "Choose Main",
+          "type": "choice",
+          "options": [
+            {
+              "name": "Tandoori Chicken",
+              "price": 0,
+              "veg": false
+            },
+            {
+              "name": "Malai Chicken Tikka",
+              "price": 0,
+              "veg": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gravy-rice-bowl",
+      "name": "Gravy Rice Bowl",
+      "price": 17.9,
+      "veg": null,
+      "includes": "Rice, Salad",
+      "modifierGroups": [
+        {
+          "name": "Choose Main",
+          "type": "choice",
+          "options": [
+            {
+              "name": "Chicken Rice",
+              "price": 0,
+              "veg": false
+            },
+            {
+              "name": "Mutton Rice",
+              "price": 0,
+              "veg": false
+            },
+            {
+              "name": "Palak Paneer",
+              "price": 0,
+              "veg": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deluxe-combo",
+      "name": "Deluxe Combo",
+      "price": 23.7,
+      "veg": null,
+      "includes": "Rice, Salad, Choose 2 Mains, Choose Bread",
+      "modifierGroups": [
+        {
+          "name": "Choose 2 Mains",
+          "type": "multi-choice",
+          "count": 2,
+          "options": [
+            {
+              "name": "Chicken Tikka Masala",
+              "price": 0,
+              "veg": false
+            },
+            {
+              "name": "Smoked Butter Chicken",
+              "price": 0,
+              "veg": false
+            },
+            {
+              "name": "Palak Paneer",
+              "price": 0,
+              "veg": true
+            },
+            {
+              "name": "Punjabi Dal Makhani",
+              "price": 0,
+              "veg": true
+            },
+            {
+              "name": "Desi Ghee Dal Tadka",
+              "price": 0,
+              "veg": true
+            },
+            {
+              "name": "Baingan Bhartha",
+              "price": 0,
+              "veg": true
+            },
+            {
+              "name": "Patiala Gosht",
+              "price": 2.4,
+              "veg": false
+            },
+            {
+              "name": "Mutton Bhuna",
+              "price": 2.4,
+              "veg": false
+            },
+            {
+              "name": "Maharaja Chicken Curry",
+              "price": 0,
+              "veg": false
+            },
+            {
+              "name": "Maharaja Chicken Bhuna",
+              "price": 0,
+              "veg": false
+            }
+          ]
+        },
+        {
+          "name": "Choose Bread",
+          "type": "choice",
+          "options": [
+            {
+              "name": "Garlic Naan",
+              "price": 0
+            },
+            {
+              "name": "Butter Naan",
+              "price": 0
+            },
+            {
+              "name": "Laccha Prantha",
+              "price": 0
+            },
+            {
+              "name": "2 Tawa Roti",
+              "price": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "extras": {
+    "Chaats": [
+      {
+        "name": "Dahi Bhalla Papdi Chaat",
+        "price": 12.49,
+        "veg": true
+      },
+      {
+        "name": "Rawalpindi Cholle Bhature",
+        "price": 18,
+        "veg": true
+      },
+      {
+        "name": "Rawalpindi Cholle Kulche",
+        "price": 18,
+        "veg": true
+      },
+      {
+        "name": "Pav Bhaji",
+        "price": 14.49,
+        "veg": true
+      },
+      {
+        "name": "Desi Ghee Aloo Tikki Chaat",
+        "price": 12.49,
+        "veg": true
+      },
+      {
+        "name": "Bhel Puri",
+        "price": 10.49,
+        "veg": true
+      },
+      {
+        "name": "Pani Puri",
+        "price": 12.49,
+        "veg": true
+      },
+      {
+        "name": "Stuffed Pani Puri",
+        "price": 12.49,
+        "veg": true
+      }
+    ],
+    "Appetizers": [
+      {
+        "name": "Aloo Samosa",
+        "price": 7,
+        "veg": true
+      },
+      {
+        "name": "Crispy Palak Pakoda",
+        "price": 11.95,
+        "veg": true
+      },
+      {
+        "name": "Amritsari Fish Pakora",
+        "price": 16.49,
+        "veg": false
+      },
+      {
+        "name": "Amritsari Papad",
+        "price": 3.49,
+        "veg": true
+      }
+    ],
+    "Tandoor": [
+      {
+        "name": "Tandoori Chicken Kebabs",
+        "price": 19,
+        "veg": false
+      },
+      {
+        "name": "Chicken Malai Tikka",
+        "price": 18.49,
+        "veg": false
+      },
+      {
+        "name": "Veg Tandoori Chicken Tikka (soya chaap)",
+        "price": 18.49,
+        "veg": true
+      },
+      {
+        "name": "Veg Malai Chicken Tikka (soya chaap)",
+        "price": 18.49,
+        "veg": true
+      }
+    ],
+    "Veg Curry": [
+      {
+        "name": "Punjabi Dal Makhani",
+        "price": 15.49,
+        "veg": true
+      },
+      {
+        "name": "Pindi Cholle",
+        "price": 14.49,
+        "veg": true
+      },
+      {
+        "name": "Shahi Paneer Special",
+        "price": 18,
+        "veg": true
+      },
+      {
+        "name": "Paneer Kadhai Wala",
+        "price": 18,
+        "veg": true
+      },
+      {
+        "name": "Paneer Bhurji",
+        "price": 18.49,
+        "veg": true
+      },
+      {
+        "name": "Palak Paneer",
+        "price": 18.49,
+        "veg": true
+      },
+      {
+        "name": "Desi Ghee Dal Tadka",
+        "price": 13.49,
+        "veg": true
+      },
+      {
+        "name": "Rajma",
+        "price": 13.95,
+        "veg": true
+      },
+      {
+        "name": "Saag",
+        "price": 14.95,
+        "veg": true
+      },
+      {
+        "name": "Baingan Bhartha",
+        "price": 14.95,
+        "veg": true
+      },
+      {
+        "name": "Kadhai Paneer",
+        "price": 18,
+        "veg": true
+      },
+      {
+        "name": "Methi Malai Matar",
+        "price": 18.49,
+        "veg": true
+      },
+      {
+        "name": "Veg Butter Chicken (soya chaap)",
+        "price": 20.49,
+        "veg": true
+      },
+      {
+        "name": "Veg Kadhai Chicken (soya chaap)",
+        "price": 20.49,
+        "veg": true
+      }
+    ],
+    "Non-Veg Curry": [
+      {
+        "name": "Smoked Butter Chicken",
+        "price": 20.49,
+        "veg": false
+      },
+      {
+        "name": "Chicken Tikka Masala",
+        "price": 20.49,
+        "veg": false
+      },
+      {
+        "name": "Maharaja Chicken Curry",
+        "price": 19.49,
+        "veg": false
+      },
+      {
+        "name": "Maharaja Chicken Bhuna",
+        "price": 19.49,
+        "veg": false
+      },
+      {
+        "name": "Patiala Gosht",
+        "price": 23.49,
+        "veg": false
+      },
+      {
+        "name": "Mutton Bhuna",
+        "price": 23.49,
+        "veg": false
+      },
+      {
+        "name": "Egg Bhurji",
+        "price": 14.49,
+        "veg": false
+      }
+    ],
+    "Breads": [
+      {
+        "name": "Garlic Naan",
+        "price": 4.95,
+        "veg": true
+      },
+      {
+        "name": "Butter Naan",
+        "price": 4.49,
+        "veg": true
+      },
+      {
+        "name": "Tandoori Roti",
+        "price": 3.49,
+        "veg": true
+      },
+      {
+        "name": "Laccha Prantha",
+        "price": 3.95,
+        "veg": true
+      },
+      {
+        "name": "Desi Ghee Aloo Prantha",
+        "price": 9.49,
+        "veg": true
+      },
+      {
+        "name": "Desi Ghee Paneer Prantha",
+        "price": 9.49,
+        "veg": true
+      },
+      {
+        "name": "Bhatura (1pc)",
+        "price": 3.86,
+        "veg": true
+      },
+      {
+        "name": "Kulcha (1pc)",
+        "price": 3.12,
+        "veg": true
+      },
+      {
+        "name": "Pav (extra)",
+        "price": 2.95,
+        "veg": true
+      },
+      {
+        "name": "Makki Di Roti",
+        "price": 3.49,
+        "veg": true
+      },
+      {
+        "name": "Tawa Roti",
+        "price": 1.49,
+        "veg": true
+      }
+    ],
+    "Wraps": [
+      {
+        "name": "Chicken Kathi Roll",
+        "price": 9,
+        "veg": false
+      },
+      {
+        "name": "Paneer Kathi Roll",
+        "price": 9,
+        "veg": true
+      },
+      {
+        "name": "Egg Chicken Kathi Roll",
+        "price": 10,
+        "veg": false
+      },
+      {
+        "name": "Egg Paneer Kathi Roll",
+        "price": 10,
+        "veg": true
+      },
+      {
+        "name": "Double Egg Chicken Kathi Roll",
+        "price": 14,
+        "veg": false
+      },
+      {
+        "name": "Double Egg Paneer Kathi Roll",
+        "price": 14,
+        "veg": true
+      }
+    ],
+    "Rice & Biryani": [
+      {
+        "name": "Chicken Biryani",
+        "price": 18.49,
+        "veg": false
+      },
+      {
+        "name": "Mutton Biryani",
+        "price": 19.49,
+        "veg": false
+      },
+      {
+        "name": "Jeera Rice",
+        "price": 5.49,
+        "veg": true
+      }
+    ],
+    "Lunch Specials": [
+      {
+        "name": "Shakahari Bhoj (Dal Makhani, Shahi Paneer, Rice, Roti, Salad, Raita)",
+        "price": 20,
+        "veg": true
+      },
+      {
+        "name": "Non Veg Thali (Dal Makhani, Chicken, Rice, Roti, Salad, Raita)",
+        "price": 23.49,
+        "veg": false
+      },
+      {
+        "name": "Dal Chawal / Rajma Chawal",
+        "price": 18.49,
+        "veg": true
+      },
+      {
+        "name": "Chicken Rice / Mutton Rice",
+        "price": 20,
+        "veg": false
+      }
+    ],
+    "Dessert": [
+      {
+        "name": "Desi Ghee Moongdal Halwa",
+        "price": 9.49,
+        "veg": true
+      },
+      {
+        "name": "Desi Ghee Gajar Halwa",
+        "price": 9.49,
+        "veg": true
+      },
+      {
+        "name": "Desi Ghee Suji Halwa",
+        "price": 9.49,
+        "veg": true
+      },
+      {
+        "name": "Gulab Jamun à la Vanilla",
+        "price": 9.49,
+        "veg": true
+      },
+      {
+        "name": "Gulab Jamun Melts",
+        "price": 7.49,
+        "veg": true
+      },
+      {
+        "name": "Kheer",
+        "price": 8.49,
+        "veg": true
+      },
+      {
+        "name": "Rose Natraj Kulfi",
+        "price": 9.49,
+        "veg": true
+      },
+      {
+        "name": "Natraj Kulfi",
+        "price": 9.49,
+        "veg": true
+      }
+    ],
+    "Drinks": [
+      {
+        "name": "Mango Lassi",
+        "price": 5,
+        "veg": true
+      },
+      {
+        "name": "Sweet Lassi",
+        "price": 5,
+        "veg": true
+      },
+      {
+        "name": "Lemon Soda",
+        "price": 5,
+        "veg": true
+      },
+      {
+        "name": "Jal Jeera",
+        "price": 5,
+        "veg": true
+      },
+      {
+        "name": "Canned Soda",
+        "price": 3,
+        "veg": true
+      },
+      {
+        "name": "Saratoga Sparkling Water",
+        "price": 4.25,
+        "veg": true
+      },
+      {
+        "name": "Aam Panna",
+        "price": 6,
+        "veg": true
+      }
+    ]
+  }
+};
+/*__CONFIG_END__*/
+</script>
+<style>
+:root{
+  --pine:#123B2F; --pine-deep:#0C2A21; --marigold:#F2A31B; --chili:#C63D2F;
+  --paper:#FFFFFF; --mist:#F1F3EF; --ink:#1E2421; --ink-soft:#5A645E; --line:#DDE3DD;
+  --radius:14px;
+  --font-display:'Bricolage Grotesque',sans-serif;
+  --font-body:'IBM Plex Sans',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{font-family:var(--font-body);color:var(--ink);background:var(--paper);line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:1rem}
+:focus-visible{outline:3px solid var(--marigold);outline-offset:2px;border-radius:4px}
+
+.topbar{position:sticky;top:0;z-index:50;background:var(--pine);color:#fff;padding:.7rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{display:flex;align-items:center;gap:.6rem;font-family:var(--font-display);font-weight:700;font-size:1.05rem}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--marigold);flex:none;cursor:pointer}
+.topbar .phone{font-family:var(--font-mono);font-size:.85rem;color:#DCE8E0;text-decoration:none;white-space:nowrap}
+.topbar .phone:hover{color:var(--marigold)}
+
+.hero{background:var(--pine);color:#fff;padding:3rem 1.2rem 4rem;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:auto -10% -55% -10%;height:70%;background:radial-gradient(60% 100% at 50% 0%,rgba(242,163,27,.16),transparent 70%)}
+.hero-inner{max-width:1060px;margin:0 auto;position:relative;z-index:1}
+.eyebrow{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--marigold);margin-bottom:1rem}
+.hero h1{font-family:var(--font-display);font-weight:800;font-size:clamp(2rem,5.5vw,3.2rem);line-height:1.08;max-width:16ch}
+.hero h1 em{font-style:normal;color:var(--marigold)}
+.hero p.sub{margin-top:1.1rem;max-width:48ch;color:#CFE0D6;font-size:1.02rem}
+.hero-cta{margin-top:1.8rem;display:flex;gap:.8rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.5rem;border:none;border-radius:999px;padding:.85rem 1.6rem;font-weight:600;font-size:1rem;text-decoration:none;transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn-gold{background:var(--marigold);color:var(--pine-deep)}
+.btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4)}
+
+.strip{background:var(--marigold);color:var(--pine-deep);padding:.75rem 1.2rem;text-align:center;font-weight:600;font-size:.9rem}
+.strip b{font-family:var(--font-mono)}
+
+.wrap{max-width:1060px;margin:0 auto;padding:2.6rem 1.2rem}
+.section-title{font-family:var(--font-display);font-weight:700;font-size:clamp(1.4rem,3.2vw,2rem);margin-bottom:.3rem}
+.section-sub{color:var(--ink-soft);max-width:62ch;margin-bottom:1.6rem}
+
+.builder{display:grid;grid-template-columns:1fr 350px;gap:1.6rem;align-items:start}
+@media (max-width:900px){.builder{grid-template-columns:1fr}}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1.3rem}
+.step-label{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--chili);margin-bottom:.3rem}
+.panel h3{font-family:var(--font-display);font-weight:700;font-size:1.2rem;margin-bottom:.9rem}
+.panel + .panel{margin-top:1.3rem}
+.field label{display:block;font-size:.8rem;font-weight:600;margin-bottom:.3rem;color:var(--ink-soft)}
+.field input,.field select,.field textarea{width:100%;padding:.65rem .8rem;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--pine)}
+.datetime-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+@media (max-width:520px){.datetime-grid{grid-template-columns:1fr}}
+
+/* filter chips */
+.filter-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:.4rem .95rem;font-size:.85rem;font-weight:500}
+.chip.selected{border-color:var(--pine);background:var(--mist);font-weight:600}
+.chip.veg.selected{border-color:#3F7A35;background:#EEF3EB;color:#2F5A28}
+
+/* combo cards */
+.combo{border:1.5px solid var(--line);border-radius:var(--radius);padding:1rem;margin-bottom:.9rem;transition:border-color .15s}
+.combo.in-cart{border-color:var(--pine);background:var(--mist)}
+.combo-top{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start}
+.combo-top h4{font-family:var(--font-display);font-weight:700;font-size:1.02rem}
+.combo-top .inc{font-size:.82rem;color:var(--ink-soft);margin-top:.15rem}
+.combo-top .pr{font-family:var(--font-mono);font-weight:600;color:var(--pine);white-space:nowrap;font-size:1.05rem}
+.veg-mark{display:inline-block;width:12px;height:12px;border:1.5px solid #3F7A35;border-radius:3px;position:relative;margin-right:.4rem;vertical-align:-1px}
+.veg-mark::after{content:"";position:absolute;inset:2px;border-radius:50%;background:#3F7A35}
+.nonveg-mark{display:inline-block;width:12px;height:12px;border:1.5px solid var(--chili);border-radius:3px;position:relative;margin-right:.4rem;vertical-align:-1px}
+.nonveg-mark::after{content:"";position:absolute;inset:2px;border-radius:50%;background:var(--chili)}
+.mods{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.7rem}
+@media (max-width:560px){.mods{grid-template-columns:1fr}}
+.mods select{width:100%;padding:.5rem .6rem;border:1.5px solid var(--line);border-radius:8px;font-size:.85rem;background:#fff}
+.addon{display:flex;align-items:center;gap:.5rem;font-size:.85rem;padding:.35rem 0}
+.addon input{width:17px;height:17px;accent-color:var(--pine)}
+.combo-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:.8rem;gap:.8rem;flex-wrap:wrap}
+.qty{display:flex;align-items:center;border:1.5px solid var(--pine);border-radius:999px;overflow:hidden}
+.qty button{width:40px;height:40px;background:var(--pine);color:#fff;border:none;font-size:1.2rem;line-height:1}
+.qty button:hover{background:var(--pine-deep)}
+.qty output{width:44px;text-align:center;font-family:var(--font-mono);font-weight:600}
+.tier-badge{font-family:var(--font-mono);font-size:.72rem;font-weight:600;background:#EEF3EB;color:#3F5A35;border-radius:999px;padding:.2rem .6rem}
+.line-total{font-family:var(--font-mono);font-size:.9rem;color:var(--ink-soft)}
+.line-total b{color:var(--pine)}
+
+/* extras accordion */
+.acc{border:1.5px solid var(--line);border-radius:var(--radius);margin-bottom:.7rem;overflow:hidden}
+.acc-head{width:100%;background:#fff;border:none;display:flex;justify-content:space-between;align-items:center;padding:.9rem 1rem;font-family:var(--font-display);font-weight:700;font-size:1rem;text-align:left}
+.acc-head:hover{background:var(--mist)}
+.acc-head .n{font-family:var(--font-mono);font-size:.75rem;color:var(--ink-soft);font-weight:400}
+.acc-body{display:none;border-top:1px solid var(--line);padding:.4rem 1rem .8rem}
+.acc.open .acc-body{display:block}
+.x-row{display:flex;justify-content:space-between;align-items:center;gap:.8rem;padding:.55rem 0;border-bottom:1px dashed var(--line);font-size:.9rem}
+.x-row:last-child{border-bottom:none}
+.x-row .xn{flex:1}
+.x-row .xp{font-family:var(--font-mono);color:var(--pine);font-weight:600;white-space:nowrap}
+.qty.sm button{width:32px;height:32px;font-size:1rem}
+.qty.sm output{width:34px;font-size:.9rem}
+
+/* dietary + spice */
+.diet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem}
+.diet-card{border:1.5px solid var(--line);border-radius:12px;padding:.7rem}
+.diet-card label{font-size:.8rem;font-weight:600;display:block;margin-bottom:.35rem}
+.mini-step{display:flex;align-items:center;gap:.5rem}
+.mini-step button{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--pine);background:#fff;color:var(--pine);font-size:1rem;line-height:1}
+.mini-step button:hover{background:var(--pine);color:#fff}
+.mini-step output{font-family:var(--font-mono);font-weight:600;min-width:2ch;text-align:center}
+.spice-row{display:flex;gap:.6rem;margin-top:.4rem;flex-wrap:wrap}
+.chip.spice.selected{border-color:var(--chili);background:#FBEDEA;color:var(--chili);font-weight:600}
+
+/* contact + pay */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+@media (max-width:520px){.contact-grid{grid-template-columns:1fr}}
+.contact-grid .full{grid-column:1/-1}
+.tip-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem}
+.pay-row{display:flex;flex-direction:column;gap:.7rem;margin-top:1.2rem}
+.pay-btn{border-radius:12px;padding:1rem;font-size:1rem;font-weight:600;border:none;display:flex;justify-content:space-between;align-items:center;gap:.6rem}
+.pay-card{background:var(--pine);color:#fff}
+.pay-card:hover{background:var(--pine-deep)}
+.pay-invoice{background:#fff;border:2px solid var(--pine);color:var(--pine)}
+.pay-invoice:hover{background:var(--mist)}
+.pay-note{font-size:.78rem;color:var(--ink-soft);text-align:center;margin-top:.4rem}
+
+/* receipt */
+.receipt{position:sticky;top:76px;background:var(--pine-deep);color:#EAF3EE;border-radius:var(--radius);padding:1.3rem 1.2rem;font-family:var(--font-mono);font-size:.86rem;box-shadow:0 14px 34px rgba(12,42,33,.25);max-height:calc(100vh - 100px);overflow:auto}
+.receipt::before{content:"";display:block;height:8px;margin:-1.3rem -1.2rem 1rem;background:repeating-linear-gradient(90deg,var(--marigold) 0 14px,transparent 14px 22px);border-radius:var(--radius) var(--radius) 0 0}
+.receipt h4{font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:.9rem;color:#fff}
+.r-line{display:flex;justify-content:space-between;gap:.8rem;padding:.32rem 0;border-bottom:1px dashed rgba(255,255,255,.14)}
+.r-line span:last-child{white-space:nowrap}
+.r-line .r-sub{display:block;font-size:.72rem;color:#9FB8AC}
+.r-line.total{border-bottom:none;margin-top:.5rem;padding-top:.7rem;border-top:2px solid var(--marigold);font-size:1.05rem;font-weight:600;color:#fff}
+.r-line.save{color:var(--marigold)}
+.r-meta{margin-top:.9rem;font-size:.72rem;color:#9FB8AC;line-height:1.6}
+.r-empty{color:#9FB8AC;font-size:.8rem;padding:.4rem 0}
+@media (max-width:900px){.receipt{position:fixed;top:auto;bottom:0;left:0;right:0;border-radius:16px 16px 0 0;z-index:60;padding:.9rem 1.2rem;max-height:42vh}.receipt::before{display:none}body{padding-bottom:130px}}
+
+footer{background:var(--pine);color:#B9CFC4;padding:2.2rem 1.2rem;font-size:.85rem}
+.foot-inner{max-width:1060px;margin:0 auto;display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+footer a{color:#fff;text-decoration:none}
+footer a:hover{color:var(--marigold)}
+.foot-brand{font-family:var(--font-display);font-weight:700;color:#fff;font-size:1rem;margin-bottom:.3rem}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:var(--ink);color:#fff;padding:.8rem 1.3rem;border-radius:999px;font-size:.9rem;z-index:300;opacity:0;pointer-events:none;transition:opacity .25s;max-width:90vw;text-align:center}
+.toast.show{opacity:1}
+@media (max-width:900px){.toast{bottom:auto;top:70px}}
+
+/* ---------- ADMIN ---------- */
+.admin-overlay{position:fixed;inset:0;background:rgba(12,42,33,.65);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow:auto}
+.admin-overlay.open{display:flex}
+.admin{background:#fff;border-radius:16px;max-width:820px;width:100%;padding:1.6rem;margin:auto}
+.admin h2{font-family:var(--font-display);font-weight:800;font-size:1.4rem;margin-bottom:.2rem}
+.admin .sub{font-size:.85rem;color:var(--ink-soft);margin-bottom:1rem}
+.admin h3{font-family:var(--font-display);font-weight:700;font-size:1.05rem;margin:1.4rem 0 .7rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+@media (max-width:560px){.admin-grid{grid-template-columns:1fr}}
+.a-row{display:grid;grid-template-columns:2fr .9fr .8fr auto;gap:.5rem;align-items:end;padding:.4rem 0}
+@media (max-width:560px){.a-row{grid-template-columns:1fr 1fr}}
+.a-del{background:#FBEDEA;color:var(--chili);border:none;border-radius:8px;padding:.55rem .7rem;font-weight:600;font-size:.78rem;height:40px}
+.a-del:hover{background:var(--chili);color:#fff}
+.a-combo{border:1.5px solid var(--line);border-radius:12px;padding:.9rem;margin-bottom:.8rem}
+.a-combo summary{cursor:pointer;font-weight:600;font-size:.92rem;display:flex;justify-content:space-between;gap:.6rem}
+.a-combo .body{margin-top:.8rem}
+.a-combo textarea{min-height:70px;resize:vertical;font-size:.82rem;font-family:var(--font-mono)}
+.a-cat{border:1.5px solid var(--line);border-radius:12px;padding:.9rem;margin-bottom:.8rem}
+.a-cat-head{display:flex;gap:.6rem;align-items:end;margin-bottom:.4rem}
+.a-cat-head .field{flex:1}
+.admin-actions{position:sticky;bottom:0;background:#fff;display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.4rem;padding:1rem 0 .2rem;border-top:1px solid var(--line)}
+.a-btn{border-radius:10px;padding:.8rem 1.2rem;font-weight:600;font-size:.92rem;border:none}
+.a-primary{background:var(--pine);color:#fff}
+.a-primary:hover{background:var(--pine-deep)}
+.a-secondary{background:#fff;border:2px solid var(--pine);color:var(--pine)}
+.a-secondary:hover{background:var(--mist)}
+.a-plain{background:var(--mist);color:var(--ink)}
+.a-close{float:right;background:var(--mist);border:none;border-radius:50%;width:36px;height:36px;font-size:1.1rem}
+.a-help{font-size:.78rem;color:var(--ink-soft);background:var(--mist);border-radius:10px;padding:.7rem .9rem;margin-top:.9rem;line-height:1.6}
+.a-help b{color:var(--pine)}
+.pin-gate{text-align:center;padding:1.5rem 0}
+.pin-gate input{font-family:var(--font-mono);font-size:1.6rem;letter-spacing:.4em;text-align:center;width:200px;padding:.6rem;border:2px solid var(--line);border-radius:12px;margin:.9rem 0}
+.a-tier-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:.5rem;align-items:end;padding:.3rem 0}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="dot" id="adminDot"></span>Rathore's Kitchen · Corporate</div>
+  <div style="display:flex;align-items:center;gap:.9rem">
+    <button id="authBtn" onclick="authClick()" style="display:none;background:transparent;border:1.5px solid rgba(255,255,255,.4);color:#fff;border-radius:999px;padding:.4rem 1rem;font-size:.82rem;font-weight:600">Sign in</button>
+    <a class="phone" id="topPhone" href="tel:+16692430547">(669) 243-0547</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Punjabi catering for Bay Area offices</div>
+    <h1>The office lunch everyone <em>actually</em> looks forward to.</h1>
+    <p class="sub">Full Rathore's menu, corporate volume pricing that applies itself, dietary counts handled, and one clean invoice. No quote requests, no phone tag.</p>
+    <div class="hero-cta">
+      <a href="#order" class="btn btn-gold">Start your order →</a>
+      <a href="#extras" class="btn btn-ghost">Browse full menu</a>
+    </div>
+  </div>
+</section>
+
+<div class="strip" id="tierStrip">Volume discounts, applied automatically: <b>10–19 = 5% off</b> · <b>20–29 = 10% off</b> · <b>30+ = 15% off</b></div>
+
+<section class="wrap" id="order">
+  <div class="builder">
+    <div>
+      <!-- STEP 1 -->
+      <div class="panel">
+        <div class="step-label">Step 1</div>
+        <h3>When do you need it?</h3>
+        <div class="datetime-grid">
+          <div class="field"><label for="date">Delivery date</label><input type="date" id="date" onchange="recalc()"></div>
+          <div class="field"><label for="time">Arrival time</label>
+            <select id="time" onchange="recalc()">
+              <option>11:00 AM</option><option>11:30 AM</option><option selected>12:00 PM</option>
+              <option>12:30 PM</option><option>1:00 PM</option><option>5:30 PM</option><option>6:00 PM</option>
+            </select></div>
+        </div>
+      </div>
+
+      <!-- STEP 2: COMBOS -->
+      <div class="panel">
+        <div class="step-label">Step 2</div>
+        <h3>Corporate combos</h3>
+        <div class="filter-row">
+          <button type="button" class="chip selected" data-f="all" onclick="setFilter('all')">All</button>
+          <button type="button" class="chip veg" data-f="veg" onclick="setFilter('veg')">🌱 Veg only</button>
+          <button type="button" class="chip" data-f="nonveg" onclick="setFilter('nonveg')">Non-veg</button>
+        </div>
+        <div id="comboList"><div class="combo"><div class="combo-top"><div><h4><span class="nonveg-mark"></span>Chicken Kathi Roll Combo</h4><div class="inc">Chicken Kathi Roll, Waffle Fries</div></div><div class="pr">$13.90</div></div><div class="mods"><div><label class="addon"><input type="checkbox" onchange="toggleAddon('chicken-kathi',0,0,this.checked)"> Add Eggs <span style="font-family:var(--font-mono);color:var(--ink-soft)">+$2.65</span></label><label class="addon"><input type="checkbox" onchange="toggleAddon('chicken-kathi',0,1,this.checked)"> Make It Double Stuffing <span style="font-family:var(--font-mono);color:var(--ink-soft)">+$4.50</span></label></div></div><div class="combo-bottom"><div class="qty"><button type="button" aria-label="Fewer" onclick="bumpCombo('chicken-kathi',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpCombo('chicken-kathi',1)">+</button></div></div></div><div class="combo"><div class="combo-top"><div><h4><span class="veg-mark"></span>Paneer Kathi Roll Combo</h4><div class="inc">Paneer Kathi Roll, Waffle Fries</div></div><div class="pr">$13.90</div></div><div class="mods"><div><label class="addon"><input type="checkbox" onchange="toggleAddon('paneer-kathi',0,0,this.checked)"> Add Eggs <span style="font-family:var(--font-mono);color:var(--ink-soft)">+$2.65</span></label><label class="addon"><input type="checkbox" onchange="toggleAddon('paneer-kathi',0,1,this.checked)"> Make It Double Stuffing <span style="font-family:var(--font-mono);color:var(--ink-soft)">+$4.50</span></label></div></div><div class="combo-bottom"><div class="qty"><button type="button" aria-label="Fewer" onclick="bumpCombo('paneer-kathi',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpCombo('paneer-kathi',1)">+</button></div></div></div><div class="combo"><div class="combo-top"><div><h4><span class="nonveg-mark"></span>Chicken Tikka Masala Combo</h4><div class="inc">12oz Chicken Tikka Masala, 12oz Rice, Half Naan</div></div><div class="pr">$17.90</div></div><div class="mods"><div class="field"><label>Choose Naan</label><select onchange="setChoice('ctm-combo',0,0,1,this.value)"><option value="0" selected>Garlic Naan</option><option value="1">Butter Naan</option></select></div></div><div class="combo-bottom"><div class="qty"><button type="button" aria-label="Fewer" onclick="bumpCombo('ctm-combo',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpCombo('ctm-combo',1)">+</button></div></div></div><div class="combo"><div class="combo-top"><div><h4><span class="nonveg-mark"></span>Smoked Butter Chicken Combo</h4><div class="inc">12oz Butter Chicken, 12oz Rice, Half Naan</div></div><div class="pr">$17.90</div></div><div class="mods"><div class="field"><label>Choose Naan</label><select onchange="setChoice('butter-chicken-combo',0,0,1,this.value)"><option value="0" selected>Garlic Naan</option><option value="1">Butter Naan</option></select></div></div><div class="combo-bottom"><div class="qty"><button type="button" aria-label="Fewer" onclick="bumpCombo('butter-chicken-combo',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpCombo('butter-chicken-combo',1)">+</button></div></div></div><div class="combo"><div class="combo-top"><div><h4><span class="veg-mark"></span>Dal Tadka Combo</h4><div class="inc">12oz Dal Tadka, 12oz Rice, Bread of Choice, Pickle</div></div><div class="pr">$17.90</div></div><div class="mods"><div class="field"><label>Choose Bread</label><select onchange="setChoice('dal-tadka-combo',0,0,1,this.value)"><option value="0" selected>2 Tawa Roti</option><option value="1">1 Plain Prantha</option><option value="2">2 Plain Prantha (+$3.40)</option></select></div></div><div class="combo-bottom"><div class="qty"><button type="button" aria-label="Fewer" onclick="bumpCombo('dal-tadka-combo',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpCombo('dal-tadka-combo',1)">+</button></div></div></div><div class="combo"><div class="combo-top"><div><h4><span class="veg-mark"></span>Baingan Bhartha Combo</h4><div class="inc">12oz Baingan Bhartha, 12oz Rice, Bread of Choice, Pickle</div></div><div class="pr">$17.90</div></div><div class="mods"><div class="field"><label>Choose Bread</label><select onchange="setChoice('baingan-bhartha-combo',0,0,1,this.value)"><option value="0" selected>2 Tawa Roti</option><option value="1">1 Plain Prantha</option><option value="2">2 Plain Prantha (+$3.40)</option><option value="3">Garlic Naan (+$2.40)</option><option value="4">Butter Naan (+$2.40)</option></select></div></div><div class="combo-bottom"><div class="qty"><button type="button" aria-label="Fewer" onclick="bumpCombo('baingan-bhartha-combo',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpCombo('baingan-bhartha-combo',1)">+</button></div></div></div><div class="combo"><div class="combo-top"><div><h4><span class="veg-mark"></span>Palak Paneer Combo</h4><div class="inc">12oz Palak Paneer, 12oz Rice, Bread of Choice</div></div><div class="pr">$17.90</div></div><div class="mods"><div class="field"><label>Choose Bread</label><select onchange="setChoice('palak-paneer-combo',0,0,1,this.value)"><option value="0" selected>2 Tawa Roti</option><option value="1">1 Plain Prantha</option><option value="2">2 Plain Prantha (+$3.40)</option><option value="3">Garlic Naan (+$2.40)</option><option value="4">Butter Naan (+$2.40)</option></select></div></div><div class="combo-bottom"><div class="qty"><button type="button" aria-label="Fewer" onclick="bumpCombo('palak-paneer-combo',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpCombo('palak-paneer-combo',1)">+</button></div></div></div><div class="combo"><div class="combo-top"><div><h4><span class="veg-mark"></span>Saag Thali</h4><div class="inc">12oz Saag, 2 Makki Roti, Salad, Jaggery</div></div><div class="pr">$17.90</div></div><div class="combo-bottom"><div class="qty"><button type="button" aria-label="Fewer" onclick="bumpCombo('saag-thali',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpCombo('saag-thali',1)">+</button></div></div></div><div class="combo"><div class="combo-top"><div><h4>Tandoori Rice Bowl</h4><div class="inc">Rice, Salad</div></div><div class="pr">$17.90</div></div><div class="mods"><div class="field"><label>Choose Main</label><select onchange="setChoice('tandoori-rice-bowl',0,0,1,this.value)"><option value="0" selected>Tandoori Chicken</option><option value="1">Malai Chicken Tikka</option></select></div></div><div class="combo-bottom"><div class="qty"><button type="button" aria-label="Fewer" onclick="bumpCombo('tandoori-rice-bowl',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpCombo('tandoori-rice-bowl',1)">+</button></div></div></div><div class="combo"><div class="combo-top"><div><h4>Gravy Rice Bowl</h4><div class="inc">Rice, Salad</div></div><div class="pr">$17.90</div></div><div class="mods"><div class="field"><label>Choose Main</label><select onchange="setChoice('gravy-rice-bowl',0,0,1,this.value)"><option value="0" selected>Chicken Rice</option><option value="1">Mutton Rice</option><option value="2">Palak Paneer</option></select></div></div><div class="combo-bottom"><div class="qty"><button type="button" aria-label="Fewer" onclick="bumpCombo('gravy-rice-bowl',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpCombo('gravy-rice-bowl',1)">+</button></div></div></div><div class="combo"><div class="combo-top"><div><h4>Deluxe Combo</h4><div class="inc">Rice, Salad, Choose 2 Mains, Choose Bread</div></div><div class="pr">$23.70</div></div><div class="mods"><div class="field"><label>Choose 2 Mains — pick 1</label><select onchange="setChoice('deluxe-combo',0,0,2,this.value)"><option value="0" selected>Chicken Tikka Masala</option><option value="1">Smoked Butter Chicken</option><option value="2">Palak Paneer</option><option value="3">Punjabi Dal Makhani</option><option value="4">Desi Ghee Dal Tadka</option><option value="5">Baingan Bhartha</option><option value="6">Patiala Gosht (+$2.40)</option><option value="7">Mutton Bhuna (+$2.40)</option><option value="8">Maharaja Chicken Curry</option><option value="9">Maharaja Chicken Bhuna</option></select></div><div class="field"><label>Choose 2 Mains — pick 2</label><select onchange="setChoice('deluxe-combo',0,1,2,this.value)"><option value="0">Chicken Tikka Masala</option><option value="1" selected>Smoked Butter Chicken</option><option value="2">Palak Paneer</option><option value="3">Punjabi Dal Makhani</option><option value="4">Desi Ghee Dal Tadka</option><option value="5">Baingan Bhartha</option><option value="6">Patiala Gosht (+$2.40)</option><option value="7">Mutton Bhuna (+$2.40)</option><option value="8">Maharaja Chicken Curry</option><option value="9">Maharaja Chicken Bhuna</option></select></div><div class="field"><label>Choose Bread</label><select onchange="setChoice('deluxe-combo',1,0,1,this.value)"><option value="0" selected>Garlic Naan</option><option value="1">Butter Naan</option><option value="2">Laccha Prantha</option><option value="3">2 Tawa Roti</option></select></div></div><div class="combo-bottom"><div class="qty"><button type="button" aria-label="Fewer" onclick="bumpCombo('deluxe-combo',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpCombo('deluxe-combo',1)">+</button></div></div></div></div>
+      </div>
+
+      <!-- STEP 3: EXTRAS -->
+      <div class="panel" id="extras">
+        <div class="step-label">Step 3 · optional</div>
+        <h3>Add from the full menu</h3>
+        <p style="font-size:.85rem;color:var(--ink-soft);margin-bottom:.9rem">Chaats for the demo day, halwa for the birthday, lassi for everyone — volume discounts apply here too.</p>
+        <div id="extrasList"><div class="acc open" data-cat="Chaats"><button type="button" class="acc-head" onclick="this.parentElement.classList.toggle('open')">Chaats<span class="n">8 items</span></button><div class="acc-body"><div class="x-row"><span class="xn"><span class="veg-mark"></span>Dahi Bhalla Papdi Chaat</span><span class="xp">$12.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Chaats||Dahi Bhalla Papdi Chaat',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Chaats||Dahi Bhalla Papdi Chaat',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Rawalpindi Cholle Bhature</span><span class="xp">$18.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Chaats||Rawalpindi Cholle Bhature',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Chaats||Rawalpindi Cholle Bhature',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Rawalpindi Cholle Kulche</span><span class="xp">$18.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Chaats||Rawalpindi Cholle Kulche',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Chaats||Rawalpindi Cholle Kulche',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Pav Bhaji</span><span class="xp">$14.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Chaats||Pav Bhaji',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Chaats||Pav Bhaji',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Desi Ghee Aloo Tikki Chaat</span><span class="xp">$12.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Chaats||Desi Ghee Aloo Tikki Chaat',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Chaats||Desi Ghee Aloo Tikki Chaat',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Bhel Puri</span><span class="xp">$10.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Chaats||Bhel Puri',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Chaats||Bhel Puri',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Pani Puri</span><span class="xp">$12.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Chaats||Pani Puri',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Chaats||Pani Puri',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Stuffed Pani Puri</span><span class="xp">$12.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Chaats||Stuffed Pani Puri',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Chaats||Stuffed Pani Puri',1)">+</button></div></div></div></div><div class="acc" data-cat="Appetizers"><button type="button" class="acc-head" onclick="this.parentElement.classList.toggle('open')">Appetizers<span class="n">4 items</span></button><div class="acc-body"><div class="x-row"><span class="xn"><span class="veg-mark"></span>Aloo Samosa</span><span class="xp">$7.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Appetizers||Aloo Samosa',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Appetizers||Aloo Samosa',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Crispy Palak Pakoda</span><span class="xp">$11.95</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Appetizers||Crispy Palak Pakoda',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Appetizers||Crispy Palak Pakoda',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Amritsari Fish Pakora</span><span class="xp">$16.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Appetizers||Amritsari Fish Pakora',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Appetizers||Amritsari Fish Pakora',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Amritsari Papad</span><span class="xp">$3.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Appetizers||Amritsari Papad',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Appetizers||Amritsari Papad',1)">+</button></div></div></div></div><div class="acc" data-cat="Tandoor"><button type="button" class="acc-head" onclick="this.parentElement.classList.toggle('open')">Tandoor<span class="n">4 items</span></button><div class="acc-body"><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Tandoori Chicken Kebabs</span><span class="xp">$19.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Tandoor||Tandoori Chicken Kebabs',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Tandoor||Tandoori Chicken Kebabs',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Chicken Malai Tikka</span><span class="xp">$18.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Tandoor||Chicken Malai Tikka',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Tandoor||Chicken Malai Tikka',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Veg Tandoori Chicken Tikka (soya chaap)</span><span class="xp">$18.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Tandoor||Veg Tandoori Chicken Tikka (soya chaap)',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Tandoor||Veg Tandoori Chicken Tikka (soya chaap)',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Veg Malai Chicken Tikka (soya chaap)</span><span class="xp">$18.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Tandoor||Veg Malai Chicken Tikka (soya chaap)',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Tandoor||Veg Malai Chicken Tikka (soya chaap)',1)">+</button></div></div></div></div><div class="acc" data-cat="Veg Curry"><button type="button" class="acc-head" onclick="this.parentElement.classList.toggle('open')">Veg Curry<span class="n">14 items</span></button><div class="acc-body"><div class="x-row"><span class="xn"><span class="veg-mark"></span>Punjabi Dal Makhani</span><span class="xp">$15.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Punjabi Dal Makhani',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Punjabi Dal Makhani',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Pindi Cholle</span><span class="xp">$14.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Pindi Cholle',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Pindi Cholle',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Shahi Paneer Special</span><span class="xp">$18.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Shahi Paneer Special',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Shahi Paneer Special',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Paneer Kadhai Wala</span><span class="xp">$18.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Paneer Kadhai Wala',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Paneer Kadhai Wala',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Paneer Bhurji</span><span class="xp">$18.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Paneer Bhurji',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Paneer Bhurji',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Palak Paneer</span><span class="xp">$18.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Palak Paneer',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Palak Paneer',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Desi Ghee Dal Tadka</span><span class="xp">$13.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Desi Ghee Dal Tadka',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Desi Ghee Dal Tadka',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Rajma</span><span class="xp">$13.95</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Rajma',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Rajma',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Saag</span><span class="xp">$14.95</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Saag',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Saag',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Baingan Bhartha</span><span class="xp">$14.95</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Baingan Bhartha',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Baingan Bhartha',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Kadhai Paneer</span><span class="xp">$18.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Kadhai Paneer',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Kadhai Paneer',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Methi Malai Matar</span><span class="xp">$18.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Methi Malai Matar',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Methi Malai Matar',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Veg Butter Chicken (soya chaap)</span><span class="xp">$20.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Veg Butter Chicken (soya chaap)',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Veg Butter Chicken (soya chaap)',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Veg Kadhai Chicken (soya chaap)</span><span class="xp">$20.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Veg Curry||Veg Kadhai Chicken (soya chaap)',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Veg Curry||Veg Kadhai Chicken (soya chaap)',1)">+</button></div></div></div></div><div class="acc" data-cat="Non-Veg Curry"><button type="button" class="acc-head" onclick="this.parentElement.classList.toggle('open')">Non-Veg Curry<span class="n">7 items</span></button><div class="acc-body"><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Smoked Butter Chicken</span><span class="xp">$20.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Non-Veg Curry||Smoked Butter Chicken',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Non-Veg Curry||Smoked Butter Chicken',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Chicken Tikka Masala</span><span class="xp">$20.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Non-Veg Curry||Chicken Tikka Masala',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Non-Veg Curry||Chicken Tikka Masala',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Maharaja Chicken Curry</span><span class="xp">$19.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Non-Veg Curry||Maharaja Chicken Curry',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Non-Veg Curry||Maharaja Chicken Curry',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Maharaja Chicken Bhuna</span><span class="xp">$19.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Non-Veg Curry||Maharaja Chicken Bhuna',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Non-Veg Curry||Maharaja Chicken Bhuna',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Patiala Gosht</span><span class="xp">$23.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Non-Veg Curry||Patiala Gosht',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Non-Veg Curry||Patiala Gosht',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Mutton Bhuna</span><span class="xp">$23.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Non-Veg Curry||Mutton Bhuna',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Non-Veg Curry||Mutton Bhuna',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Egg Bhurji</span><span class="xp">$14.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Non-Veg Curry||Egg Bhurji',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Non-Veg Curry||Egg Bhurji',1)">+</button></div></div></div></div><div class="acc" data-cat="Breads"><button type="button" class="acc-head" onclick="this.parentElement.classList.toggle('open')">Breads<span class="n">11 items</span></button><div class="acc-body"><div class="x-row"><span class="xn"><span class="veg-mark"></span>Garlic Naan</span><span class="xp">$4.95</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Breads||Garlic Naan',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Breads||Garlic Naan',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Butter Naan</span><span class="xp">$4.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Breads||Butter Naan',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Breads||Butter Naan',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Tandoori Roti</span><span class="xp">$3.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Breads||Tandoori Roti',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Breads||Tandoori Roti',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Laccha Prantha</span><span class="xp">$3.95</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Breads||Laccha Prantha',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Breads||Laccha Prantha',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Desi Ghee Aloo Prantha</span><span class="xp">$9.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Breads||Desi Ghee Aloo Prantha',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Breads||Desi Ghee Aloo Prantha',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Desi Ghee Paneer Prantha</span><span class="xp">$9.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Breads||Desi Ghee Paneer Prantha',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Breads||Desi Ghee Paneer Prantha',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Bhatura (1pc)</span><span class="xp">$3.86</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Breads||Bhatura (1pc)',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Breads||Bhatura (1pc)',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Kulcha (1pc)</span><span class="xp">$3.12</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Breads||Kulcha (1pc)',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Breads||Kulcha (1pc)',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Pav (extra)</span><span class="xp">$2.95</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Breads||Pav (extra)',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Breads||Pav (extra)',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Makki Di Roti</span><span class="xp">$3.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Breads||Makki Di Roti',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Breads||Makki Di Roti',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Tawa Roti</span><span class="xp">$1.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Breads||Tawa Roti',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Breads||Tawa Roti',1)">+</button></div></div></div></div><div class="acc" data-cat="Wraps"><button type="button" class="acc-head" onclick="this.parentElement.classList.toggle('open')">Wraps<span class="n">6 items</span></button><div class="acc-body"><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Chicken Kathi Roll</span><span class="xp">$9.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Wraps||Chicken Kathi Roll',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Wraps||Chicken Kathi Roll',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Paneer Kathi Roll</span><span class="xp">$9.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Wraps||Paneer Kathi Roll',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Wraps||Paneer Kathi Roll',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Egg Chicken Kathi Roll</span><span class="xp">$10.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Wraps||Egg Chicken Kathi Roll',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Wraps||Egg Chicken Kathi Roll',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Egg Paneer Kathi Roll</span><span class="xp">$10.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Wraps||Egg Paneer Kathi Roll',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Wraps||Egg Paneer Kathi Roll',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Double Egg Chicken Kathi Roll</span><span class="xp">$14.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Wraps||Double Egg Chicken Kathi Roll',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Wraps||Double Egg Chicken Kathi Roll',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Double Egg Paneer Kathi Roll</span><span class="xp">$14.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Wraps||Double Egg Paneer Kathi Roll',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Wraps||Double Egg Paneer Kathi Roll',1)">+</button></div></div></div></div><div class="acc" data-cat="Rice &amp; Biryani"><button type="button" class="acc-head" onclick="this.parentElement.classList.toggle('open')">Rice &amp; Biryani<span class="n">3 items</span></button><div class="acc-body"><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Chicken Biryani</span><span class="xp">$18.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Rice & Biryani||Chicken Biryani',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Rice & Biryani||Chicken Biryani',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Mutton Biryani</span><span class="xp">$19.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Rice & Biryani||Mutton Biryani',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Rice & Biryani||Mutton Biryani',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Jeera Rice</span><span class="xp">$5.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Rice & Biryani||Jeera Rice',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Rice & Biryani||Jeera Rice',1)">+</button></div></div></div></div><div class="acc" data-cat="Lunch Specials"><button type="button" class="acc-head" onclick="this.parentElement.classList.toggle('open')">Lunch Specials<span class="n">4 items</span></button><div class="acc-body"><div class="x-row"><span class="xn"><span class="veg-mark"></span>Shakahari Bhoj (Dal Makhani, Shahi Paneer, Rice, Roti, Salad, Raita)</span><span class="xp">$20.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Lunch Specials||Shakahari Bhoj (Dal Makhani, Shahi Paneer, Rice, Roti, Salad, Raita)',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Lunch Specials||Shakahari Bhoj (Dal Makhani, Shahi Paneer, Rice, Roti, Salad, Raita)',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Non Veg Thali (Dal Makhani, Chicken, Rice, Roti, Salad, Raita)</span><span class="xp">$23.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Lunch Specials||Non Veg Thali (Dal Makhani, Chicken, Rice, Roti, Salad, Raita)',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Lunch Specials||Non Veg Thali (Dal Makhani, Chicken, Rice, Roti, Salad, Raita)',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Dal Chawal / Rajma Chawal</span><span class="xp">$18.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Lunch Specials||Dal Chawal / Rajma Chawal',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Lunch Specials||Dal Chawal / Rajma Chawal',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="nonveg-mark"></span>Chicken Rice / Mutton Rice</span><span class="xp">$20.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Lunch Specials||Chicken Rice / Mutton Rice',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Lunch Specials||Chicken Rice / Mutton Rice',1)">+</button></div></div></div></div><div class="acc" data-cat="Dessert"><button type="button" class="acc-head" onclick="this.parentElement.classList.toggle('open')">Dessert<span class="n">8 items</span></button><div class="acc-body"><div class="x-row"><span class="xn"><span class="veg-mark"></span>Desi Ghee Moongdal Halwa</span><span class="xp">$9.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Dessert||Desi Ghee Moongdal Halwa',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Dessert||Desi Ghee Moongdal Halwa',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Desi Ghee Gajar Halwa</span><span class="xp">$9.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Dessert||Desi Ghee Gajar Halwa',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Dessert||Desi Ghee Gajar Halwa',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Desi Ghee Suji Halwa</span><span class="xp">$9.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Dessert||Desi Ghee Suji Halwa',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Dessert||Desi Ghee Suji Halwa',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Gulab Jamun à la Vanilla</span><span class="xp">$9.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Dessert||Gulab Jamun à la Vanilla',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Dessert||Gulab Jamun à la Vanilla',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Gulab Jamun Melts</span><span class="xp">$7.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Dessert||Gulab Jamun Melts',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Dessert||Gulab Jamun Melts',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Kheer</span><span class="xp">$8.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Dessert||Kheer',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Dessert||Kheer',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Rose Natraj Kulfi</span><span class="xp">$9.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Dessert||Rose Natraj Kulfi',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Dessert||Rose Natraj Kulfi',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Natraj Kulfi</span><span class="xp">$9.49</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Dessert||Natraj Kulfi',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Dessert||Natraj Kulfi',1)">+</button></div></div></div></div><div class="acc" data-cat="Drinks"><button type="button" class="acc-head" onclick="this.parentElement.classList.toggle('open')">Drinks<span class="n">7 items</span></button><div class="acc-body"><div class="x-row"><span class="xn"><span class="veg-mark"></span>Mango Lassi</span><span class="xp">$5.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Drinks||Mango Lassi',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Drinks||Mango Lassi',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Sweet Lassi</span><span class="xp">$5.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Drinks||Sweet Lassi',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Drinks||Sweet Lassi',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Lemon Soda</span><span class="xp">$5.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Drinks||Lemon Soda',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Drinks||Lemon Soda',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Jal Jeera</span><span class="xp">$5.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Drinks||Jal Jeera',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Drinks||Jal Jeera',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Canned Soda</span><span class="xp">$3.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Drinks||Canned Soda',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Drinks||Canned Soda',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Saratoga Sparkling Water</span><span class="xp">$4.25</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Drinks||Saratoga Sparkling Water',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Drinks||Saratoga Sparkling Water',1)">+</button></div></div><div class="x-row"><span class="xn"><span class="veg-mark"></span>Aam Panna</span><span class="xp">$6.00</span><div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra('Drinks||Aam Panna',-1)">−</button><output>0</output><button type="button" aria-label="More" onclick="bumpExtra('Drinks||Aam Panna',1)">+</button></div></div></div></div></div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="panel">
+        <div class="step-label">Step 4</div>
+        <h3>Team details &amp; payment</h3>
+        <p style="font-size:.85rem;color:var(--ink-soft);margin-bottom:.8rem">Dietary counts (optional) — we label trays &amp; boxes so nothing gets mixed up.</p>
+        <div class="diet-grid">
+          <div class="diet-card"><label>Vegan</label><div class="mini-step"><button type="button" onclick="diet('vegan',-1)" aria-label="Fewer vegan">−</button><output id="d-vegan">0</output><button type="button" onclick="diet('vegan',1)" aria-label="More vegan">+</button></div></div>
+          <div class="diet-card"><label>Gluten-free</label><div class="mini-step"><button type="button" onclick="diet('gf',-1)" aria-label="Fewer gluten-free">−</button><output id="d-gf">0</output><button type="button" onclick="diet('gf',1)" aria-label="More gluten-free">+</button></div></div>
+          <div class="diet-card"><label>Jain / no onion-garlic</label><div class="mini-step"><button type="button" onclick="diet('jain',-1)" aria-label="Fewer Jain">−</button><output id="d-jain">0</output><button type="button" onclick="diet('jain',1)" aria-label="More Jain">+</button></div></div>
+        </div>
+
+        <h3 style="margin-top:1.4rem;font-size:1.05rem">Spice level</h3>
+        <div class="spice-row">
+          <button type="button" class="chip spice selected" data-spice="mild" onclick="pickSpice('mild')">Mild (recommended)</button>
+          <button type="button" class="chip spice" data-spice="medium" onclick="pickSpice('medium')">Medium</button>
+          <button type="button" class="chip spice" data-spice="split" onclick="pickSpice('split')">Half mild / half medium</button>
+        </div>
+        <p style="font-size:.8rem;color:var(--ink-soft);margin-top:.4rem">Green chutney &amp; chili always come on the side — spice lovers can build their own heat.</p>
+
+        <h3 style="margin-top:1.4rem;font-size:1.05rem">Gratuity for the kitchen &amp; driver</h3>
+        <div class="tip-row" id="tipRow"></div>
+
+        <div class="contact-grid" style="margin-top:1.4rem">
+          <div class="field"><label for="company">Company</label><input id="company" placeholder="Acme Inc."></div>
+          <div class="field"><label for="name">Your name</label><input id="name" placeholder="Priya Sharma"></div>
+          <div class="field"><label for="email">Work email</label><input id="email" type="email" placeholder="priya@acme.com"></div>
+          <div class="field"><label for="phone">Phone</label><input id="phone" type="tel" placeholder="(650) 000-0000"></div>
+          <div class="field full"><label for="address">Office address</label><input id="address" placeholder="Street, city — suite &amp; floor help our driver"></div>
+          <div class="field full"><label for="notes">Anything else? (optional)</label><input id="notes" placeholder="Gate code, loading dock, individual boxes, names on boxes…"></div>
+        </div>
+        <div class="pay-row">
+          <button type="button" class="pay-btn pay-card" onclick="payCard()"><span>Pay by card</span><span id="cardTotal">$0.00</span></button>
+          <button type="button" class="pay-btn pay-invoice" onclick="payInvoice()"><span>Order now, pay by invoice (NET-30)</span><span>→</span></button>
+        </div>
+        <p class="pay-note">Invoice billing for registered companies — W-9 on file, itemized receipts. Cancel free up to 24 hrs before delivery.</p>
+      </div>
+    </div>
+
+    <!-- RECEIPT -->
+    <aside class="receipt" aria-live="polite" aria-label="Live order summary">
+      <h4>Your order — live</h4>
+      <div id="receiptBody"><div class="r-empty">Add items to see your total. Volume discounts apply automatically.</div></div>
+      <div class="r-meta" id="receiptMeta"></div>
+    </aside>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <div class="foot-brand">Rathore's Kitchen</div>
+      1711 W El Camino Real #B<br>Mountain View, CA 94040<br>
+      <a href="tel:+16692430547" id="footPhone">(669) 243-0547</a>
+    </div>
+    <div>
+      Corporate catering · Mon–Sat<br>
+      Same-day orders before 10 AM<br>
+      <a href="mailto:info@rathoreskitchen.com" id="footEmail">info@rathoreskitchen.com</a>
+    </div>
+    <div>
+      <a href="https://rathoreskitchen.com">Main restaurant site →</a><br>
+      Itemized receipts for expense reports<br>W-9 available on request
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status"></div>
+
+<!-- ================= AUTH ================= -->
+<div class="admin-overlay" id="authOverlay">
+  <div class="admin" style="max-width:420px">
+    <button class="a-close" onclick="closeModal('authOverlay')" aria-label="Close sign in">✕</button>
+    <div class="pin-gate" style="padding:.5rem 0 1rem">
+      <h2>Sign in / create account</h2>
+      <p class="sub" style="margin-top:.4rem">Work email daalo — we'll send a one-tap sign-in link. No password to remember. Account se order history aur one-click reorder milta hai.</p>
+      <div class="field" style="text-align:left;margin:.8rem 0">
+        <label for="authEmail">Work email</label>
+        <input id="authEmail" type="email" placeholder="priya@acme.com">
+      </div>
+      <button class="a-btn a-primary" style="width:100%" onclick="sendMagicLink()">Send sign-in link</button>
+      <p id="authMsg" style="font-size:.82rem;color:var(--ink-soft);margin-top:.8rem"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ACCOUNT / ORDER HISTORY ================= -->
+<div class="admin-overlay" id="acctOverlay">
+  <div class="admin" style="max-width:560px">
+    <button class="a-close" onclick="closeModal('acctOverlay')" aria-label="Close account">✕</button>
+    <h2>Your orders</h2>
+    <p class="sub" id="acctEmail"></p>
+    <div id="orderHistory" style="font-size:.88rem"></div>
+    <div class="admin-actions" style="position:static">
+      <button class="a-btn a-plain" onclick="signOut()">Sign out</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ADMIN ================= -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin">
+    <button class="a-close" onclick="closeAdmin()" aria-label="Close admin panel">✕</button>
+
+    <div id="pinGate" class="pin-gate">
+      <h2>Owner settings 🔒</h2>
+      <p class="sub">Enter your PIN to edit the menu &amp; prices.</p>
+      <input type="password" id="pinInput" inputmode="numeric" maxlength="6" placeholder="••••">
+      <br><button class="a-btn a-primary" onclick="checkPin()">Unlock</button>
+    </div>
+
+    <div id="adminEditor" style="display:none">
+      <h2>Menu &amp; pricing settings</h2>
+      <p class="sub">Edit → <b>Preview</b> → <b>Download updated site file</b> → upload to GitHub → Vercel auto-deploys.</p>
+
+      <h3>Volume discount tiers</h3>
+      <div id="aTiers"></div>
+      <button class="a-btn a-plain" onclick="addTierRow()">+ Add tier</button>
+
+      <h3>Corporate combos</h3>
+      <div id="aCombos"></div>
+      <button class="a-btn a-plain" onclick="addComboRow()">+ Add combo</button>
+
+      <h3>Full menu (extras)</h3>
+      <div id="aExtras"></div>
+      <button class="a-btn a-plain" onclick="addCatRow()">+ Add category</button>
+
+      <h3>Contact, gratuity &amp; security</h3>
+      <div class="admin-grid">
+        <div class="field"><label>Phone</label><input id="a-phone"></div>
+        <div class="field"><label>Catering email</label><input id="a-email" type="email"></div>
+        <div class="field"><label>Gratuity presets (%, comma-separated)</label><input id="a-tips" placeholder="0,10,15,18,20"></div>
+        <div class="field"><label>Admin PIN</label><input id="a-pin"></div>
+        <div class="field"><label>Supabase URL (for accounts)</label><input id="a-supaUrl" placeholder="https://xxxx.supabase.co"></div>
+        <div class="field"><label>Supabase anon key (public)</label><input id="a-supaKey" placeholder="eyJ..."></div>
+      </div>
+
+      <div class="admin-actions">
+        <button class="a-btn a-secondary" onclick="previewConfig()">👀 Preview on page</button>
+        <button class="a-btn a-primary" onclick="downloadUpdated()">⬇ Download updated site file</button>
+        <button class="a-btn a-plain" onclick="copyConfig()">Copy config code</button>
+      </div>
+
+      <div class="a-help">
+        <b>Publish in 2 minutes:</b> Download → GitHub repo → replace <b>index.html</b> ("Upload files" ya pencil ✏️ se paste) → Commit. Vercel ~30 sec mein live kar dega.
+        <br><b>Combo options format</b> (advanced box): one group per line — <span style="font-family:var(--font-mono)">Group name (choice|addon|multi-choice:2): Option A @0, Option B @2.4</span>
+        <br><b>Note:</b> Preview sirf tumhe dikhta hai — customers ko GitHub publish ke baad.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ STATE ============ */
+let cfg = JSON.parse(JSON.stringify(CONFIG));
+let comboSel = {};      // id -> {qty, choices:{gi:oi or [oi,oi]}, addons:{gi:{oi:true}}}
+let extraSel = {};      // "cat||name" -> qty
+let vegFilter = "all";
+let spice = "mild";
+let tipPct = 0;
+const diets = {vegan:0, gf:0, jain:0};
+const fmt = n => "$" + n.toFixed(2);
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+/* ============ TIER ENGINE (same as original site) ============ */
+function sortedTiers(){ return [...cfg.tiers].sort((a,b)=>b.min-a.min); }
+function tierFor(qty){ return sortedTiers().find(t => qty >= t.min) || {discountPct:0,label:""}; }
+function tieredUnit(unit, qty){
+  if (qty <= 0) return unit;
+  return Math.round(unit * (1 - tierFor(qty).discountPct/100) * 100) / 100;
+}
+
+/* ============ RENDER: CHROME ============ */
+function renderChrome(){
+  const telHref = "tel:+1" + cfg.business.phone.replace(/\D/g,"");
+  const set = (id, txt, href) => { const el = document.getElementById(id); el.textContent = txt; if (href) el.href = href; };
+  set("topPhone", cfg.business.phone, telHref);
+  set("footPhone", cfg.business.phone, telHref);
+  set("footEmail", cfg.business.email, "mailto:" + cfg.business.email);
+
+  const tiers = sortedTiers().filter(t => t.discountPct > 0).sort((a,b)=>a.min-b.min);
+  document.getElementById("tierStrip").innerHTML =
+    "Volume discounts, applied automatically: " +
+    tiers.map(t => "<b>" + esc(t.label) + " = " + t.discountPct + "% off</b>").join(" · ");
+
+  document.getElementById("receiptMeta").innerHTML =
+    "Free delivery over $" + cfg.business.freeDeliveryOver + " · $" + cfg.business.deliveryFee +
+    " under · Sales tax added at checkout · Serving Mountain View, Palo Alto, Sunnyvale, Los Altos, Cupertino, Santa Clara &amp; San Jose.";
+
+  const tipRow = document.getElementById("tipRow");
+  tipRow.innerHTML = "";
+  cfg.business.gratuityPresets.forEach(p => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip" + (p === tipPct ? " selected" : "");
+    b.textContent = p === 0 ? "No tip" : p + "%";
+    b.onclick = () => { tipPct = p; renderChrome(); recalc(); };
+    tipRow.appendChild(b);
+  });
+}
+
+/* ============ RENDER: COMBOS ============ */
+function comboVisible(c){
+  if (vegFilter === "all") return true;
+  if (vegFilter === "veg") return c.veg === true || c.veg === null;
+  return c.veg === false || c.veg === null;
+}
+function setFilter(f){
+  vegFilter = f;
+  document.querySelectorAll(".filter-row .chip").forEach(b => b.classList.toggle("selected", b.dataset.f === f));
+  renderCombos();
+}
+function selFor(id){
+  if (!comboSel[id]) comboSel[id] = {qty:0, choices:{}, addons:{}};
+  return comboSel[id];
+}
+function renderCombos(){
+  const list = document.getElementById("comboList");
+  list.innerHTML = "";
+  cfg.combos.filter(comboVisible).forEach(c => {
+    const s = selFor(c.id);
+    const d = document.createElement("div");
+    d.className = "combo" + (s.qty > 0 ? " in-cart" : "");
+    let mods = "";
+    (c.modifierGroups || []).forEach((g, gi) => {
+      if (g.type === "addon"){
+        mods += '<div>' + g.options.map((o, oi) =>
+          '<label class="addon"><input type="checkbox" ' + (s.addons[gi]?.[oi] ? "checked" : "") +
+          ' onchange="toggleAddon(\'' + c.id + '\',' + gi + ',' + oi + ',this.checked)"> ' +
+          esc(o.name) + (o.price ? ' <span style="font-family:var(--font-mono);color:var(--ink-soft)">+' + fmt(o.price) + "</span>" : "") +
+          "</label>").join("") + "</div>";
+      } else {
+        const n = g.type === "multi-choice" ? (g.count || 2) : 1;
+        for (let slot = 0; slot < n; slot++){
+          const cur = n === 1 ? (s.choices[gi] ?? 0) : ((s.choices[gi] || [])[slot] ?? slot % g.options.length);
+          mods += '<div class="field"><label>' + esc(g.name) + (n > 1 ? " — pick " + (slot+1) : "") + "</label>" +
+            '<select onchange="setChoice(\'' + c.id + '\',' + gi + ',' + slot + ',' + n + ',this.value)">' +
+            g.options.map((o, oi) =>
+              '<option value="' + oi + '"' + (oi === cur ? " selected" : "") + ">" + esc(o.name) +
+              (o.price ? " (+" + fmt(o.price) + ")" : "") + "</option>").join("") +
+            "</select></div>";
+        }
+      }
+    });
+    const unit = comboUnit(c, s);
+    const t = tierFor(s.qty);
+    d.innerHTML =
+      '<div class="combo-top"><div><h4>' +
+      (c.veg === true ? '<span class="veg-mark"></span>' : c.veg === false ? '<span class="nonveg-mark"></span>' : "") +
+      esc(c.name) + '</h4><div class="inc">' + esc(c.includes || "") + '</div></div>' +
+      '<div class="pr">' + fmt(c.price) + "</div></div>" +
+      (mods ? '<div class="mods">' + mods + "</div>" : "") +
+      '<div class="combo-bottom"><div class="qty">' +
+      '<button type="button" aria-label="Fewer" onclick="bumpCombo(\'' + c.id + "',-1)\">−</button>" +
+      "<output>" + s.qty + "</output>" +
+      '<button type="button" aria-label="More" onclick="bumpCombo(\'' + c.id + "',1)\">+</button></div>" +
+      (s.qty > 0 && t.discountPct > 0 ? '<span class="tier-badge">' + t.discountPct + "% off</span>" : "") +
+      (s.qty > 0 ? '<span class="line-total">' + s.qty + " × " + fmt(tieredUnit(unit, s.qty)) + " = <b>" + fmt(tieredUnit(unit, s.qty) * s.qty) + "</b></span>" : "") +
+      "</div>";
+    list.appendChild(d);
+  });
+}
+function comboUnit(c, s){
+  let u = c.price;
+  (c.modifierGroups || []).forEach((g, gi) => {
+    if (g.type === "addon"){
+      Object.keys(s.addons[gi] || {}).forEach(oi => { if (s.addons[gi][oi]) u += g.options[oi].price || 0; });
+    } else if (g.type === "multi-choice"){
+      const n = g.count || 2;
+      for (let slot = 0; slot < n; slot++){
+        const oi = (s.choices[gi] || [])[slot] ?? slot % g.options.length;
+        u += g.options[oi]?.price || 0;
+      }
+    } else {
+      u += g.options[s.choices[gi] ?? 0]?.price || 0;
+    }
+  });
+  return Math.round(u * 100) / 100;
+}
+function bumpCombo(id, n){
+  const s = selFor(id);
+  s.qty = Math.max(0, s.qty + n);
+  renderCombos(); recalc();
+}
+function setChoice(id, gi, slot, n, val){
+  const s = selFor(id);
+  if (n === 1) s.choices[gi] = parseInt(val);
+  else { if (!Array.isArray(s.choices[gi])) s.choices[gi] = []; s.choices[gi][slot] = parseInt(val); }
+  renderCombos(); recalc();
+}
+function toggleAddon(id, gi, oi, on){
+  const s = selFor(id);
+  if (!s.addons[gi]) s.addons[gi] = {};
+  s.addons[gi][oi] = on;
+  renderCombos(); recalc();
+}
+
+/* ============ RENDER: EXTRAS ============ */
+function renderExtras(){
+  const list = document.getElementById("extrasList");
+  const openCats = new Set([...list.querySelectorAll(".acc.open")].map(a => a.dataset.cat));
+  list.innerHTML = "";
+  Object.entries(cfg.extras).forEach(([cat, items]) => {
+    const inCart = items.reduce((a, it) => a + (extraSel[cat + "||" + it.name] || 0), 0);
+    const acc = document.createElement("div");
+    acc.className = "acc" + (openCats.has(cat) || inCart > 0 ? " open" : "");
+    acc.dataset.cat = cat;
+    let rows = items.map(it => {
+      const key = cat + "||" + it.name;
+      const q = extraSel[key] || 0;
+      return '<div class="x-row"><span class="xn">' +
+        (it.veg === true ? '<span class="veg-mark"></span>' : it.veg === false ? '<span class="nonveg-mark"></span>' : "") +
+        esc(it.name) + '</span><span class="xp">' + fmt(it.price) + "</span>" +
+        '<div class="qty sm"><button type="button" aria-label="Fewer" onclick="bumpExtra(\'' + esc(key).replace(/'/g,"\\'") + "',-1)\">−</button>" +
+        "<output>" + q + "</output>" +
+        '<button type="button" aria-label="More" onclick="bumpExtra(\'' + esc(key).replace(/'/g,"\\'") + "',1)\">+</button></div></div>";
+    }).join("");
+    acc.innerHTML =
+      '<button type="button" class="acc-head" onclick="this.parentElement.classList.toggle(\'open\')">' +
+      esc(cat) + '<span class="n">' + items.length + " items" + (inCart ? " · " + inCart + " in order" : "") + "</span></button>" +
+      '<div class="acc-body">' + rows + "</div>";
+    list.appendChild(acc);
+  });
+}
+function bumpExtra(key, n){
+  extraSel[key] = Math.max(0, (extraSel[key] || 0) + n);
+  renderExtras(); recalc();
+}
+
+/* ============ CART / RECEIPT ============ */
+function cartLines(){
+  const lines = [];
+  cfg.combos.forEach(c => {
+    const s = comboSel[c.id];
+    if (!s || s.qty <= 0) return;
+    const unit = comboUnit(c, s);
+    const opts = [];
+    (c.modifierGroups || []).forEach((g, gi) => {
+      if (g.type === "addon"){
+        Object.keys(s.addons[gi] || {}).forEach(oi => { if (s.addons[gi][oi]) opts.push(g.options[oi].name); });
+      } else if (g.type === "multi-choice"){
+        const n = g.count || 2;
+        for (let slot = 0; slot < n; slot++) opts.push(g.options[(s.choices[gi] || [])[slot] ?? slot % g.options.length]?.name);
+      } else {
+        opts.push(g.options[s.choices[gi] ?? 0]?.name);
+      }
+    });
+    lines.push({name:c.name, detail:opts.filter(Boolean).join(", "), qty:s.qty, unit, tUnit:tieredUnit(unit, s.qty), pct:tierFor(s.qty).discountPct});
+  });
+  Object.entries(extraSel).forEach(([key, q]) => {
+    if (q <= 0) return;
+    const [cat, name] = key.split("||");
+    const it = (cfg.extras[cat] || []).find(x => x.name === name);
+    if (!it) return;
+    lines.push({name:it.name, detail:"", qty:q, unit:it.price, tUnit:tieredUnit(it.price, q), pct:tierFor(q).discountPct});
+  });
+  return lines;
+}
+function totals(){
+  const lines = cartLines();
+  const full = lines.reduce((a,l) => a + l.unit * l.qty, 0);
+  const subtotal = Math.round(lines.reduce((a,l) => a + l.tUnit * l.qty, 0) * 100) / 100;
+  const saved = Math.round((full - subtotal) * 100) / 100;
+  const tip = Math.round(subtotal * tipPct) / 100;
+  const delivery = subtotal <= 0 ? 0 : (subtotal >= cfg.business.freeDeliveryOver ? 0 : cfg.business.deliveryFee);
+  return {lines, subtotal, saved, tip, delivery, total: Math.round((subtotal + tip + delivery) * 100) / 100};
+}
+function recalc(){
+  const t = totals();
+  const body = document.getElementById("receiptBody");
+  if (!t.lines.length){
+    body.innerHTML = '<div class="r-empty">Add items to see your total. Volume discounts apply automatically.</div>';
+    document.getElementById("cardTotal").textContent = "$0.00";
+    return;
+  }
+  let h = t.lines.map(l =>
+    '<div class="r-line"><span>' + l.qty + "× " + esc(l.name) +
+    (l.pct ? ' <span class="r-sub">' + l.pct + "% off → " + fmt(l.tUnit) + "/ea</span>" : "") +
+    (l.detail ? '<span class="r-sub">' + esc(l.detail) + "</span>" : "") +
+    "</span><span>" + fmt(l.tUnit * l.qty) + "</span></div>").join("");
+  if (t.saved > 0) h += '<div class="r-line save"><span>Volume savings</span><span>−' + fmt(t.saved) + "</span></div>";
+  if (t.tip > 0) h += rl("Gratuity (" + tipPct + "%)", fmt(t.tip));
+  h += rl("Delivery" + (t.delivery === 0 ? " (free over $" + cfg.business.freeDeliveryOver + ")" : ""), t.delivery === 0 ? "$0.00" : fmt(t.delivery));
+  h += '<div class="r-line total"><span>Total</span><span>' + fmt(t.total) + "</span></div>";
+  const date = document.getElementById("date").value, time = document.getElementById("time").value;
+  const dTxt = [];
+  if (diets.vegan) dTxt.push(diets.vegan + " vegan");
+  if (diets.gf) dTxt.push(diets.gf + " GF");
+  if (diets.jain) dTxt.push(diets.jain + " Jain");
+  h += '<div class="r-meta" style="margin-top:.7rem">' +
+       (date ? "📅 " + date + " · " + time + "<br>" : "") +
+       (dTxt.length ? "🍽 " + dTxt.join(" / ") + "<br>" : "") +
+       "🌶 " + spice + "</div>";
+  body.innerHTML = h;
+  document.getElementById("cardTotal").textContent = fmt(t.total);
+}
+function rl(a,b){ return '<div class="r-line"><span>' + a + "</span><span>" + b + "</span></div>"; }
+
+/* ============ MISC INPUTS ============ */
+function diet(k, n){
+  diets[k] = Math.max(0, diets[k] + n);
+  document.getElementById("d-" + k).textContent = diets[k];
+  recalc();
+}
+function pickSpice(s){
+  spice = s;
+  document.querySelectorAll(".chip.spice").forEach(b => b.classList.toggle("selected", b.dataset.spice === s));
+  recalc();
+}
+
+/* ============ AUTH (Supabase) ============ */
+let supa = null, session = null;
+function initSupa(){
+  const u = cfg.business.supabaseUrl, k = cfg.business.supabaseAnonKey;
+  if (!u || !k || !window.supabase){ document.getElementById("authBtn").style.display = "none"; return; }
+  if (!supa){
+    supa = window.supabase.createClient(u, k);
+    supa.auth.onAuthStateChange((_e, s) => { session = s; renderAuth(); });
+  }
+  supa.auth.getSession().then(({data}) => { session = data.session; renderAuth(); });
+  document.getElementById("authBtn").style.display = "inline-block";
+}
+function renderAuth(){
+  const b = document.getElementById("authBtn");
+  if (session?.user) b.textContent = "My orders";
+  else b.textContent = "Sign in";
+}
+function authClick(){
+  if (!supa) return;
+  if (session?.user) openAccount();
+  else { document.getElementById("authOverlay").classList.add("open"); setTimeout(() => document.getElementById("authEmail").focus(), 100); }
+}
+function closeModal(id){ document.getElementById(id).classList.remove("open"); }
+["authOverlay","acctOverlay"].forEach(id => {
+  document.getElementById(id).addEventListener("click", e => { if (e.target.id === id) closeModal(id); });
+});
+async function sendMagicLink(){
+  const email = document.getElementById("authEmail").value.trim();
+  const msg = document.getElementById("authMsg");
+  if (!email){ msg.textContent = "Email daalo pehle."; return; }
+  msg.textContent = "Sending link…";
+  const {error} = await supa.auth.signInWithOtp({email, options:{emailRedirectTo: window.location.origin}});
+  msg.textContent = error ? ("Couldn't send: " + error.message) : "Link bheja! Check your inbox (spam bhi) — tap karte hi sign in ho jaoge.";
+}
+async function signOut(){
+  await supa.auth.signOut();
+  session = null; renderAuth(); closeModal("acctOverlay");
+  toast("Signed out.");
+}
+async function openAccount(){
+  document.getElementById("acctEmail").textContent = session.user.email;
+  const box = document.getElementById("orderHistory");
+  box.innerHTML = '<p style="color:var(--ink-soft)">Loading…</p>';
+  document.getElementById("acctOverlay").classList.add("open");
+  const {data, error} = await supa.from("orders").select("*").order("created_at", {ascending:false}).limit(25);
+  if (error){ box.innerHTML = '<p style="color:var(--chili)">Couldn\'t load orders: ' + esc(error.message) + "</p>"; return; }
+  if (!data.length){ box.innerHTML = '<p style="color:var(--ink-soft)">No orders yet — pehla order karo, yahan dikh jayega. 🍽</p>'; return; }
+  box.innerHTML = data.map(o => {
+    const lines = (o.lines || []).map(l => l.qty + "× " + esc(l.name)).join(", ");
+    return '<div style="border:1.5px solid var(--line);border-radius:12px;padding:.9rem;margin-bottom:.7rem">' +
+      '<div style="display:flex;justify-content:space-between;gap:.6rem;font-weight:600">' +
+      "<span>" + esc(o.delivery_date || (o.created_at || "").slice(0,10)) + " · " + esc(o.delivery_time || "") + "</span>" +
+      '<span style="font-family:var(--font-mono);color:var(--pine)">
+</body>
+</html>
+ + Number(o.total || 0).toFixed(2) + "</span></div>" +
+      '<div style="color:var(--ink-soft);font-size:.83rem;margin:.3rem 0">' + lines + "</div>" +
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:.6rem">' +
+      '<span class="tier-badge">' + esc(o.status || "") + "</span>" +
+      '<button class="a-btn a-plain" style="padding:.4rem .9rem;font-size:.8rem" onclick=\'reorder(' + JSON.stringify(JSON.stringify(o.lines || [])) + ")'>Reorder</button>" +
+      "</div></div>";
+  }).join("");
+}
+function reorder(linesJson){
+  const lines = JSON.parse(linesJson);
+  comboSel = {}; extraSel = {};
+  lines.forEach(l => {
+    const c = cfg.combos.find(x => x.name === l.name);
+    if (c){ selFor(c.id).qty = l.qty; return; }
+    for (const [cat, items] of Object.entries(cfg.extras)){
+      if (items.find(x => x.name === l.name)){ extraSel[cat + "||" + l.name] = l.qty; return; }
+    }
+  });
+  closeModal("acctOverlay");
+  renderCombos(); renderExtras(); recalc();
+  toast("Order wapas cart mein! Date choose karke checkout karo.");
+  document.getElementById("order").scrollIntoView();
+}
+function authHeaders(){
+  const h = {"Content-Type":"application/json"};
+  if (session?.access_token) h["Authorization"] = "Bearer " + session.access_token;
+  return h;
+}
+
+/* ============ CHECKOUT ============ */
+function orderPayload(method){
+  const t = totals();
+  return {
+    method,
+    lines: t.lines.map(l => ({name:l.name, detail:l.detail, qty:l.qty, unit:l.tUnit})),
+    subtotal:t.subtotal, volumeSavings:t.saved, gratuityPct:tipPct, gratuity:t.tip, delivery:t.delivery, total:t.total,
+    diets, spice,
+    date:document.getElementById("date").value, time:document.getElementById("time").value,
+    company:document.getElementById("company").value, name:document.getElementById("name").value,
+    email:document.getElementById("email").value, phone:document.getElementById("phone").value,
+    address:document.getElementById("address").value, notes:document.getElementById("notes").value
+  };
+}
+function validate(){
+  if (!cartLines().length){ toast("Add at least one item first."); return false; }
+  if (!document.getElementById("date").value){ toast("Choose a delivery date (Step 1)."); return false; }
+  if (!document.getElementById("email").value || !document.getElementById("address").value){
+    toast("Add your email and office address (Step 4)."); return false;
+  }
+  return true;
+}
+async function payCard(){
+  if (!validate()) return;
+  toast("Taking you to secure checkout…");
+  const t = totals();
+  const items = t.lines.map(l => ({name:l.name + (l.detail ? " (" + l.detail + ")" : ""), unitAmountCents:Math.round(l.tUnit * 100), quantity:l.qty}));
+  if (t.tip > 0) items.push({name:"Gratuity (" + tipPct + "%)", unitAmountCents:Math.round(t.tip * 100), quantity:1});
+  if (t.delivery > 0) items.push({name:"Delivery", unitAmountCents:Math.round(t.delivery * 100), quantity:1});
+  try{
+    const o = orderPayload("card");
+    let orderId = null;
+    try{
+      const saved = await fetch("/api/order", {method:"POST", headers:authHeaders(), body:JSON.stringify(o)});
+      if (saved.ok) orderId = (await saved.json()).id;
+    }catch(_){ /* order saving is best-effort; checkout can still proceed */ }
+    const res = await fetch("/api/create-checkout-session", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({items, orderId, email:o.email})
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else throw new Error(data.error || "no url");
+  }catch(e){
+    toast("Card checkout isn't live yet — use invoice, or call " + cfg.business.phone + " and we'll take it now.");
+  }
+}
+async function payInvoice(){
+  if (!validate()) return;
+  const o = orderPayload("invoice");
+  try{
+    const res = await fetch("/api/order", {
+      method:"POST", headers:authHeaders(),
+      body: JSON.stringify(o)
+    });
+    if (!res.ok) throw new Error();
+    comboSel = {}; extraSel = {};
+    renderCombos(); renderExtras(); recalc();
+    toast("Order received! Confirmation + invoice hits your inbox soon. 🙏");
+  }catch(e){
+    const lines = o.lines.map(l => l.qty + "x " + l.name + (l.detail ? " (" + l.detail + ")" : "") + " @ $" + l.unit.toFixed(2)).join("\n");
+    const bodyTxt = encodeURIComponent(
+      "CORPORATE ORDER — PAY BY INVOICE\n\n" + lines +
+      "\n\nSubtotal: $" + o.subtotal.toFixed(2) +
+      (o.volumeSavings ? "\nVolume savings: -$" + o.volumeSavings.toFixed(2) : "") +
+      (o.gratuity ? "\nGratuity (" + o.gratuityPct + "%): $" + o.gratuity.toFixed(2) : "") +
+      "\nDelivery: $" + o.delivery.toFixed(2) +
+      "\nTOTAL: $" + o.total.toFixed(2) +
+      "\n\nDate: " + o.date + " " + o.time +
+      "\nSpice: " + o.spice +
+      "\nDietary: " + JSON.stringify(o.diets) +
+      "\n\nCompany: " + o.company + "\nName: " + o.name + "\nEmail: " + o.email +
+      "\nPhone: " + o.phone + "\nAddress: " + o.address + "\nNotes: " + o.notes);
+    window.location = "mailto:" + cfg.business.email + "?subject=" +
+      encodeURIComponent("Corporate order — " + (o.company || o.name)) + "&body=" + bodyTxt;
+    toast("Opening your email with the full order — hit send and you're done.");
+  }
+}
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 4600);
+}
+
+/* ============ ADMIN ============ */
+let adminTaps = 0, adminTapTimer;
+document.getElementById("adminDot").addEventListener("click", () => {
+  adminTaps++;
+  clearTimeout(adminTapTimer);
+  adminTapTimer = setTimeout(() => adminTaps = 0, 1600);
+  if (adminTaps >= 5){ adminTaps = 0; openAdmin(); }
+});
+if (location.hash === "#admin") setTimeout(openAdmin, 300);
+
+function openAdmin(){
+  document.getElementById("adminOverlay").classList.add("open");
+  document.getElementById("pinGate").style.display = "block";
+  document.getElementById("adminEditor").style.display = "none";
+  document.getElementById("pinInput").value = "";
+  setTimeout(() => document.getElementById("pinInput").focus(), 100);
+}
+function closeAdmin(){ document.getElementById("adminOverlay").classList.remove("open"); }
+document.getElementById("adminOverlay").addEventListener("click", e => { if (e.target.id === "adminOverlay") closeAdmin(); });
+document.getElementById("pinInput").addEventListener("keydown", e => { if (e.key === "Enter") checkPin(); });
+function checkPin(){
+  if (document.getElementById("pinInput").value === cfg.adminPin){
+    document.getElementById("pinGate").style.display = "none";
+    document.getElementById("adminEditor").style.display = "block";
+    fillAdmin();
+  } else toast("Wrong PIN — try again.");
+}
+
+/* --- serialization of modifier groups <-> text --- */
+function modsToText(groups){
+  return (groups || []).map(g => {
+    const type = g.type === "multi-choice" ? "multi-choice:" + (g.count || 2) : g.type;
+    return g.name + " (" + type + "): " + g.options.map(o => o.name + " @" + (o.price || 0)).join(", ");
+  }).join("\n");
+}
+function textToMods(txt){
+  return txt.split("\n").map(s => s.trim()).filter(Boolean).map(line => {
+    const m = line.match(/^(.+?)\s*\((choice|addon|multi-choice(?::(\d+))?)\)\s*:\s*(.+)$/);
+    if (!m) return null;
+    const g = {name:m[1].trim(), type:m[2].startsWith("multi-choice") ? "multi-choice" : m[2], options:[]};
+    if (g.type === "multi-choice") g.count = parseInt(m[3] || "2");
+    g.options = m[4].split(",").map(o => {
+      const om = o.trim().match(/^(.*?)(?:\s*@\s*([\d.]+))?$/);
+      return {name:om[1].trim(), price:parseFloat(om[2] || "0") || 0};
+    }).filter(o => o.name);
+    return g;
+  }).filter(Boolean);
+}
+
+function fillAdmin(){
+  // tiers
+  const tw = document.getElementById("aTiers");
+  tw.innerHTML = "";
+  sortedTiers().forEach(t => tw.appendChild(tierRow(t)));
+  // combos
+  const cw = document.getElementById("aCombos");
+  cw.innerHTML = "";
+  cfg.combos.forEach(c => cw.appendChild(comboRow(c)));
+  // extras
+  const xw = document.getElementById("aExtras");
+  xw.innerHTML = "";
+  Object.entries(cfg.extras).forEach(([cat, items]) => xw.appendChild(catRow(cat, items)));
+  // contact
+  document.getElementById("a-phone").value = cfg.business.phone;
+  document.getElementById("a-email").value = cfg.business.email;
+  document.getElementById("a-tips").value = cfg.business.gratuityPresets.join(",");
+  document.getElementById("a-pin").value = cfg.adminPin;
+  document.getElementById("a-supaUrl").value = cfg.business.supabaseUrl || "";
+  document.getElementById("a-supaKey").value = cfg.business.supabaseAnonKey || "";
+}
+function tierRow(t){
+  const d = document.createElement("div");
+  d.className = "a-tier-row";
+  d.innerHTML =
+    '<div class="field"><label>Label</label><input class="at-label" value="' + esc(t.label) + '"></div>' +
+    '<div class="field"><label>Min qty</label><input class="at-min" type="number" value="' + t.min + '"></div>' +
+    '<div class="field"><label>Discount %</label><input class="at-pct" type="number" step="1" value="' + t.discountPct + '"></div>' +
+    '<button class="a-del" type="button" onclick="this.parentElement.remove()">Delete</button>';
+  return d;
+}
+function addTierRow(){ document.getElementById("aTiers").appendChild(tierRow({label:"40+", min:40, discountPct:20})); }
+function comboRow(c){
+  const d = document.createElement("details");
+  d.className = "a-combo";
+  d.innerHTML =
+    "<summary><span>" + esc(c.name) + '</span><span style="font-family:var(--font-mono)">' + fmt(c.price) + "</span></summary>" +
+    '<div class="body">' +
+    '<div class="a-row">' +
+      '<div class="field"><label>Name</label><input class="ac-name" value="' + esc(c.name) + '"></div>' +
+      '<div class="field"><label>$ price</label><input class="ac-price" type="number" step="0.1" value="' + c.price + '"></div>' +
+      '<div class="field"><label>Veg?</label><select class="ac-veg"><option value="true"' + (c.veg === true ? " selected" : "") + '>Veg</option><option value="false"' + (c.veg === false ? " selected" : "") + '>Non-veg</option><option value="null"' + (c.veg == null ? " selected" : "") + ">Both/NA</option></select></div>" +
+      '<button class="a-del" type="button" onclick="this.closest(\'details\').remove()">Delete</button>' +
+    "</div>" +
+    '<div class="field"><label>Includes (shown under the name)</label><input class="ac-inc" value="' + esc(c.includes || "") + '"></div>' +
+    '<div class="field" style="margin-top:.5rem"><label>Options — advanced (one group per line, see format below)</label>' +
+    '<textarea class="ac-mods">' + esc(modsToText(c.modifierGroups)) + "</textarea></div>" +
+    "</div>";
+  return d;
+}
+function addComboRow(){
+  const el = comboRow({name:"New Combo", price:15, veg:null, includes:"What's included", modifierGroups:[]});
+  el.open = true;
+  document.getElementById("aCombos").appendChild(el);
+}
+function catRow(cat, items){
+  const d = document.createElement("div");
+  d.className = "a-cat";
+  d.innerHTML =
+    '<div class="a-cat-head"><div class="field"><label>Category</label><input class="ax-cat" value="' + esc(cat) + '"></div>' +
+    '<button class="a-del" type="button" onclick="this.closest(\'.a-cat\').remove()">Delete category</button></div>' +
+    '<div class="ax-items"></div>' +
+    '<button class="a-btn a-plain" type="button" style="margin-top:.4rem" onclick="addItemRow(this)">+ Add item</button>';
+  const box = d.querySelector(".ax-items");
+  items.forEach(it => box.appendChild(itemRow(it)));
+  return d;
+}
+function itemRow(it){
+  const r = document.createElement("div");
+  r.className = "a-row";
+  r.innerHTML =
+    '<div class="field"><label>Item</label><input class="ax-name" value="' + esc(it.name) + '"></div>' +
+    '<div class="field"><label>$ price</label><input class="ax-price" type="number" step="0.01" value="' + it.price + '"></div>' +
+    '<div class="field"><label>Veg?</label><select class="ax-veg"><option value="true"' + (it.veg === true ? " selected" : "") + '>Veg</option><option value="false"' + (it.veg === false ? " selected" : "") + '>Non-veg</option><option value="null"' + (it.veg == null ? " selected" : "") + ">NA</option></select></div>" +
+    '<button class="a-del" type="button" onclick="this.parentElement.remove()">✕</button>';
+  return r;
+}
+function addItemRow(btn){
+  btn.previousElementSibling.appendChild(itemRow({name:"New item", price:10, veg:true}));
+}
+function addCatRow(){
+  document.getElementById("aExtras").appendChild(catRow("New Category", []));
+}
+function readAdmin(){
+  const tiers = [...document.querySelectorAll("#aTiers .a-tier-row")].map(r => ({
+    label:r.querySelector(".at-label").value.trim(),
+    min:parseInt(r.querySelector(".at-min").value) || 0,
+    discountPct:parseFloat(r.querySelector(".at-pct").value) || 0
+  }));
+  if (!tiers.find(t => t.min === 0)) tiers.push({min:0, discountPct:0, label:"1+"});
+  const vegVal = v => v === "true" ? true : v === "false" ? false : null;
+  const combos = [...document.querySelectorAll("#aCombos .a-combo")].map((d, i) => ({
+    id:"c" + i + "_" + d.querySelector(".ac-name").value.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    name:d.querySelector(".ac-name").value.trim() || "Combo",
+    price:parseFloat(d.querySelector(".ac-price").value) || 0,
+    veg:vegVal(d.querySelector(".ac-veg").value),
+    includes:d.querySelector(".ac-inc").value.trim(),
+    modifierGroups:textToMods(d.querySelector(".ac-mods").value)
+  }));
+  if (!combos.length){ toast("Add at least one combo."); return null; }
+  const extras = {};
+  [...document.querySelectorAll("#aExtras .a-cat")].forEach(d => {
+    const cat = d.querySelector(".ax-cat").value.trim() || "Menu";
+    extras[cat] = [...d.querySelectorAll(".a-row")].map(r => ({
+      name:r.querySelector(".ax-name").value.trim(),
+      price:parseFloat(r.querySelector(".ax-price").value) || 0,
+      veg:vegVal(r.querySelector(".ax-veg").value)
+    })).filter(x => x.name);
+  });
+  return {
+    adminPin:document.getElementById("a-pin").value.trim() || "1711",
+    business:{
+      phone:document.getElementById("a-phone").value.trim(),
+      email:document.getElementById("a-email").value.trim(),
+      deliveryFee:cfg.business.deliveryFee,
+      freeDeliveryOver:cfg.business.freeDeliveryOver,
+      gratuityPresets:document.getElementById("a-tips").value.split(",").map(s => parseFloat(s.trim())).filter(n => !isNaN(n)),
+      supabaseUrl:document.getElementById("a-supaUrl").value.trim(),
+      supabaseAnonKey:document.getElementById("a-supaKey").value.trim()
+    },
+    tiers, combos, extras
+  };
+}
+function previewConfig(){
+  const c = readAdmin();
+  if (!c) return;
+  cfg = c;
+  comboSel = {}; extraSel = {};
+  renderAll(); closeAdmin();
+  toast("Preview live! Publish karne ke liye file download karke GitHub pe daalo.");
+  document.getElementById("order").scrollIntoView();
+}
+function configBlock(c){
+  return "/*__CONFIG_START__*/\nconst CONFIG = " + JSON.stringify(c, null, 2) + ";\n/*__CONFIG_END__*/";
+}
+async function downloadUpdated(){
+  const c = readAdmin();
+  if (!c) return;
+  cfg = c; renderAll();
+  try{
+    const res = await fetch(window.location.pathname || "/", {cache:"no-store"});
+    let html = await res.text();
+    html = html.replace(/\/\*__CONFIG_START__\*\/[\s\S]*?\/\*__CONFIG_END__\*\//, configBlock(c));
+    const blob = new Blob([html], {type:"text/html"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "index.html";
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast("File downloaded! GitHub pe upload karo — Vercel khud deploy kar dega.");
+  }catch(e){ copyConfig(); }
+}
+async function copyConfig(){
+  const c = readAdmin();
+  if (!c) return;
+  try{
+    await navigator.clipboard.writeText(configBlock(c));
+    toast("Config copied! GitHub pe index.html kholo, purane CONFIG block ki jagah paste karo.");
+  }catch(e){ toast("Copy failed — download button use karo."); }
+}
+
+/* ============ INIT ============ */
+function renderAll(){ renderChrome(); renderCombos(); renderExtras(); recalc(); initSupa(); }
+(function(){
+  if (cfg.business.supabaseUrl === undefined) cfg.business.supabaseUrl = "";
+  if (cfg.business.supabaseAnonKey === undefined) cfg.business.supabaseAnonKey = "";
+  const d = new Date(); d.setDate(d.getDate() + 1);
+  document.getElementById("date").value = d.toISOString().slice(0, 10);
+  renderAll();
+  const q = new URLSearchParams(location.search);
+  if (q.get("success")) toast("Payment successful! 🎉 Order confirm ho gaya — dhanyavaad!");
+  if (q.get("canceled")) toast("Payment canceled — cart waise hi hai, jab ready ho tab try karo.");
+  if (q.get("success") || q.get("canceled")) history.replaceState(null, "", location.pathname);
+})();
+
+</script>
+</body>
+</html>
